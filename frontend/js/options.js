@@ -7,3 +7,5 @@ document.querySelector("#username-text-box").addEventListener("keypress", (e) =>
         e.target.value = "";
     }
 });
+
+chrome.runtime.sendMessage({request: 'get-messages'}, username: )

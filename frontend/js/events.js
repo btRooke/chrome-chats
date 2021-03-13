@@ -1,5 +1,3 @@
-
-
 chrome.runtime.onMessage.addListener(
     (request, sender, sendResponse) => {
         console.log(`request: ${JSON.stringify(request)}`)
@@ -14,4 +12,4 @@ chrome.runtime.onMessage.addListener(
                 box.addMessage(messageObj.username, timeString, messageObj.message);
         }
     }
-)
+);
