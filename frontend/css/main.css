@@ -101,3 +101,20 @@ body {
     outline: none;
 }
 
+/* Scroll Bar */
+
+.popup ::-webkit-scrollbar {
+    width: 10px;
+}
+
+.popup ::-webkit-scrollbar-track {
+    background: lightgrey;
+}
+
+.popup ::-webkit-scrollbar-thumb {
+    background: black;
+}
+
+.popup ::-webkit-scrollbar-thumb:hover {
+    background: grey;
+}
