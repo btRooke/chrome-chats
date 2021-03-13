@@ -13,8 +13,6 @@ const io = require('socket.io')(http, {
 
 const path = require('path');
 
-var serviceAccount = require("./firebase-config/chromechat-2d5d5-firebase-adminsdk-248o3-b99106582a.json");
-
 const serviceAccount = require('./firebase-config/chromechat-2d5d5-firebase-adminsdk-248o3-b99106582a.json');
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
