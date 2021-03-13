@@ -1,6 +1,6 @@
 {
-    "name": "Untitled",
-    "description": "Text Goes Here",
+    "name": "Chrome Chats",
+    "description": "Chat to people on the same site as you!",
     "version": "0.1",
     "manifest_version": 2,
     "background": {

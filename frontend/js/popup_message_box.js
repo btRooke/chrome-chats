@@ -60,6 +60,50 @@ class MessageBox {
         this.messageBarElement.value = "";
     }
 
+    addImageMessage(nameString, dateString, imageFileBlob) {
+
+        const message = document.createElement("div");
+        message.setAttribute("class", "message");
+
+        const meta = document.createElement("div");
+        meta.setAttribute("class", "msg_meta");
+
+        const name = document.createElement("div");
+        name.setAttribute("class", "sender_name");
+        name.innerHTML = nameString;
+
+        const time = document.createElement("div");
+        time.setAttribute("class", "time");
+        time.innerHTML = dateString;
+
+        const content = document.createElement("div");
+        content.setAttribute("class", "content");
+
+        const image = document.createElement("img");
+        image.setAttribute("class", "content_image");
+
+        meta.appendChild(name);
+        meta.appendChild(time);
+
+        message.appendChild(meta);
+        message.appendChild(content);
+
+        this.messagesElement.appendChild(message);
+
+        const reader = new FileReader();
+
+        reader.onload = e => {
+            image.setAttribute("src", e.target.result);
+        }
+
+        reader.readAsDataURL(imageFileBlob);
+
+        content.appendChild(image);
+
+        this.scrollToBottom();
+
+    }
+
     addMessage(nameString, dateString, contentString) {
 
         const message = document.createElement("div");

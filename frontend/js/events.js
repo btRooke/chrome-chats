@@ -8,9 +8,10 @@ chrome.runtime.onMessage.addListener(
         switch (request.request) {
             case "message":
                 let messageObj = request.message;
-                let time = new Date();
                 console.log(`Message: ${JSON.stringify(messageObj)}`)
-                box.addMessage(messageObj.username, new Date(messageObj.timestamp), messageObj.message)
+                const time = new Date(messageObj.timestamp);
+                const timeString = `${time.getHours()}:${time.getMinutes()} ${time.getDate()}`;
+                box.addMessage(messageObj.username, timeString, messageObj.message);
         }
     }
 )
