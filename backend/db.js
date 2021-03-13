@@ -10,13 +10,15 @@ module.exports.getMessages = function(room, io) {
             if (snapshot.child('imageURL')) {
                 loadImage(snapshot, (image) => {
                     snapshot.message = image;
+                    delete snapshot.imageURL;
                     room.messages.push(snapshot);
+                    io.to(room.hash).emit('message', snapshot);
                 });
             } else {
+                delete snapshot.imageURL;
                 room.messages.push(snapshot);
+                io.to(room.hash).emit('message', snapshot);
             }
-
-            io.to(room.hash).emit('message', snapshot);
         }, (error) => console.log(error));
 }
 
