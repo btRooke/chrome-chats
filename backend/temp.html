@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <script src="http://chat-rooms.ddns.net:2000/socket.io/socket.io.js">
+        </script>
+        <script>
+            const socket = io();
+
+            socket.emit("room-request", {
+               "username": "tim",
+                "url": "https://google.com"
+            });
+
+            socket.emit("send-message", {
+                "username": "tim",
+                "url": "https://google.com",
+                "payload": "hello everyone"
+            })
+
+        </script>
+    </head>
+    <body>
+    <h1>Eek</h1>
+    </body>
+</html>
