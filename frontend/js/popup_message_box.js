@@ -63,9 +63,19 @@ class MessageBox {
             return;
         }
 
-        chrome.runtime.sendMessage({request: "send-message", payload: message}, (resp) => console.log(resp));
+        if (this.imagePrimed) {
+            chrome.runtime.sendMessage({
+               request: "send-image",
+               payload: this.primedImage
+            }, (resp) => console.log(resp));
+            this.clearPrimedImage();
+        }
 
-        this.messageBarElement.value = "";
+        else {
+            chrome.runtime.sendMessage({request: "send-message", payload: message}, (resp) => console.log(resp));
+            this.messageBarElement.value = "";
+        }
+
     }
 
     addImageMessage(nameString, dateString, imageFileBlob) {
@@ -169,6 +179,7 @@ class MessageBox {
             this.primedImage = imageFile;
 
             this.messageBarElement.disabled = true;
+            this.messageBarElement.value = "";
 
             const reader = new FileReader();
 
