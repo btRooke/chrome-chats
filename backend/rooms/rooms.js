@@ -20,13 +20,13 @@ function joinRoom(socket) {
             ROOMS[data.url] = true;
 
         socket.join(data.url);
-        socket.emit("Connected to the chat!");
+        socket.emit('Connected to the chat!');
     });
 }
 
 function sendMessage(io, socket) {
-    socket.on("send-message", (data) => {
-        io.of(data.url).emit("message", {"username": data.username, "payload": data.payload})
+    socket.on('send-message', (data) => {
+        io.of(data.url).emit('message', {'username': data.username, 'payload': data.payload})
     })
 }
 
