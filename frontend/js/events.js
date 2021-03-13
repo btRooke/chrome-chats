@@ -7,10 +7,10 @@ chrome.runtime.onMessage.addListener(
 
         switch (request.request) {
             case "message":
-                let messageObj = request.payload;
+                let messageObj = request.message;
                 let time = new Date();
-                box.addMessage(messageObj.username, time.setTime(messageObj.timestamp), messageObj.message)
+                console.log(`Message: ${JSON.stringify(messageObj)}`)
+                box.addMessage(messageObj.username, new Date(messageObj.timestamp), messageObj.message)
         }
-
     }
 )

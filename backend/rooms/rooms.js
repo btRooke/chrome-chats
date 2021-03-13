@@ -24,8 +24,6 @@ class Room {
 function roomManagement(io) {
     io.on('connection', (socket) => {
         io.emit('ping');
-
-        console.log('A user connected!');
         joinRoom(io, socket);
     });
 }
@@ -34,7 +32,7 @@ function joinRoom(io, socket) {
     socket.on('room-request', (data) => {
         console.log(`Join Request: ${JSON.stringify(data)}`);
 
-        let urlID = crypto.createHash('md5').update(data.url).digest('hex');
+        let urlID = crypto.createHash('sha256').update(data.url).digest('hex');
         socket.join(urlID);
 
         if (!ROOMS[urlID]) {
