@@ -7,12 +7,12 @@
         "scripts": ["socket.io.js", "background.js"],
         "persistent": true
     },
-    "permissions": ["http://*/"],
-    "action": {
+    "permissions": ["http://*/", "activeTab"],
+    "browser_action": {
         "default_popup": "popup_message_box.html"
     },
     "options_ui": {
         "page": "options.html",
-        "chrome_style": true
+        "open_in_tab": true
     }
 }

@@ -16,6 +16,13 @@ class MessageBox {
             }
         }
 
+        this.pageTitle = messageBoxElement.querySelector(".site_name");
+
+        chrome.tabs.query(
+            { active: true, currentWindow: true },
+            (tabs) => { console.log(tabs[0]); this.pageTitle.innerHTML = tabs[0].title }
+        );
+
         this.scrollToBottom();
 
     }
@@ -24,11 +31,12 @@ class MessageBox {
 
         let message = this.messageBarElement.value.trim();
 
-        chrome.runtime.sendMessage({request: "send-message", payload: message}, (resp) => console.log(resp));
-
         if ("" === this.messageBarElement.value.trim()) {
             return;
         }
+
+        chrome.runtime.sendMessage({request: "send-message", payload: message}, (resp) => console.log(resp));
+
         this.messageBarElement.value = "";
     }
 
