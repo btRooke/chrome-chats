@@ -22,15 +22,14 @@ class MessageBox {
 
     sendMessage() {
 
-        this.messageBarElement.value;
+        let message = this.messageBarElement.value.trim();
+
+        chrome.runtime.sendMessage({request: "send-message", payload: message}, (resp) => console.log(resp));
 
         if ("" === this.messageBarElement.value.trim()) {
             return;
         }
-
-        this.addMessage("me", "dunno", this.messageBarElement.value);
         this.messageBarElement.value = "";
-
     }
 
     addMessage(nameString, dateString, contentString) {
