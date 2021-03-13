@@ -11,6 +11,8 @@ module.exports.getMessages = function(url, arr) {
 }
 
 module.exports.sendMessage = function(url, message) {
+    message.timestamp = Date.now();
+
     sites.doc(url).child('messages')
         .push(message)
 }
