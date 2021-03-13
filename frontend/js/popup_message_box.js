@@ -1,7 +1,7 @@
 const urlRegex = /(?<url>https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g
 
 function processText(text) {
-    text = text.replace(urlRegex, `<a href="url">$<url></a>`);
+    text = text.replace(urlRegex, `<a class="popup_url" href="url">$<url></a>`);
     return text
 
 }
@@ -23,6 +23,7 @@ class MessageBox {
         this.primedImageElement = messageBoxElement.querySelector(".primed");
         this.primedImageContainer = messageBoxElement.querySelector(".primed_image_container");
         this.unprime = messageBoxElement.querySelector(".unprime");
+        this.onlineCounter = messageBoxElement.querySelector(".online_counter");
 
         // send button listeners
 
@@ -140,6 +141,18 @@ class MessageBox {
         const content = document.createElement("div");
         content.setAttribute("class", "content");
         content.innerHTML = processText(contentString);
+        content.querySelectorAll("a").forEach(a => a.addEventListener("click", async (e) => {
+
+            e.preventDefault();
+            
+            chrome.tabs.query({currentWindow: true, active: true}, (tab) => {
+                chrome.tabs.update(tab.id, {url: e.target.innerHTML});
+            });
+
+            window.close();
+
+        }));
+
 
         meta.appendChild(name);
         meta.appendChild(time);
@@ -201,6 +214,10 @@ class MessageBox {
         this.messageBarElement.disabled = false;
         this.primedImageContainer.style.display = "none";
         this.imagePrimed = false;
+    }
+
+    updateNumberOfUsers(n) {
+        this.onlineCounter.innerHTML = `${n} Online`;
     }
 
 }
