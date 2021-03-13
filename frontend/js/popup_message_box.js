@@ -23,8 +23,6 @@ class MessageBox {
             (tabs) => { console.log(tabs[0]); this.pageTitle.innerHTML = tabs[0].title }
         );
 
-        this.
-
         this.scrollToBottom();
 
     }
