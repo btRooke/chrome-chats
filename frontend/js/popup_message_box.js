@@ -31,11 +31,12 @@ class MessageBox {
 
         let message = this.messageBarElement.value.trim();
 
-        chrome.runtime.sendMessage({request: "send-message", payload: message}, (resp) => console.log(resp));
-
         if ("" === this.messageBarElement.value.trim()) {
             return;
         }
+
+        chrome.runtime.sendMessage({request: "send-message", payload: message}, (resp) => console.log(resp));
+
         this.messageBarElement.value = "";
     }
 
