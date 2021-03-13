@@ -1,0 +1,10 @@
+/* https://www.w3schools.com/howto/howto_css_display_element_hover.asp */
+
+.hide {
+  display: none;
+}
+
+.hideDIV:hover + .hide {
+  display: block;
+  color: purple;
+}
