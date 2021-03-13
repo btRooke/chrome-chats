@@ -1,5 +1,6 @@
-const socket = io.connect("http://chat-rooms.ddns.net:2000/")
 
-io.on("ping", () => {
-    console.log("Connected to server!");
-});
+importScripts("./socket.io.js")
+
+const io = io("http://chat-rooms.ddns.net:2000/");
+
+console.log("hmmmm");
