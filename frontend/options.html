@@ -1,26 +1,59 @@
 <!DOCTYPE html>
 <html>
-<head><title>My Test Extension Options</title></head>
-<body>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <link href="css/main.css" rel="stylesheet" type="text/css">
+    <title>Untitled Extension Options</title>
 
-<a href="https://developer.chrome.com/docs/extensions/mv2/options/">Refer to here</a>
 
-Favorite color:
-<select id="color">
- <option value="red">red</option>
- <option value="green">green</option>
- <option value="blue">blue</option>
- <option value="yellow">yellow</option>
-</select>
 
-<label>
-  <input type="checkbox" id="like">
-  I like colors.
-</label>
+  </head>
+  <body>
 
-<div id="status"></div>
-<button id="save">Save</button>
+    <!-- https://developer.chrome.com/docs/extensions/mv2/options/ -->
 
-<script src="options.js"></script>
-</body>
+
+    Select your colour:
+    <select id="color">
+      <option value="red">red</option>
+      <option value="green">green</option>
+      <option value="blue">blue</option>
+      <option value="yellow">yellow</option>
+    </select>
+
+    <br></br>
+
+    <label>
+      <input type="checkbox" id="like">
+      I like colors.
+    </label>
+
+    <br></br>
+
+    <!-- <span><span><input type="number" min="0"></span>&nbsp;<a class="fa-icon info" href="https://github.com/gorhill/uBlock/wiki/Per-site-switches#no-large-media-elements" target="_blank">info-circle</a></span> -->
+
+    <!-- TODO add onhover comment regarding username length, allowed chars etc. -->
+
+    <span>
+      <h4>Please enter your username</h4>&nbsp;
+      <input type="text" name="username" value="">
+      <a class="fa-icon info" href="test.html" target="_blank">click here</a>
+    </span>
+
+    <br></br>
+
+    <span>
+      <h4>Pagination (number of comments per page)</h4>&nbsp;
+      <input type="number" min="0" max="250" step="50" value="100">
+      <a class="fa-icon info" href="test.html" target="_blank">click here</a>
+    </span>
+
+    <br></br>
+
+    <div id="status"></div>
+    <button id="save">Save</button>
+
+    <script src="options.js"></script>
+  </body>
 </html>
