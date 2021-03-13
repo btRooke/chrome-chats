@@ -28,6 +28,12 @@ function roomManagement(io) {
     });
 }
 
+function leaveRoom(socket, room) {
+    socket.on("leave-room", () => {
+        socket.leave(room.hash);
+    })
+}
+
 function joinRoom(io, socket) {
     socket.on('room-request', (data) => {
         console.log(`Join Request: ${JSON.stringify(data)}`);
@@ -47,6 +53,7 @@ function joinRoom(io, socket) {
 
         socket.emit("joined-room", {room: room.url});
         sendMessage(io, socket, room);
+        leaveRoom(socket, room);
     });
 }
 

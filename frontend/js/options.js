@@ -6,5 +6,4 @@ document.querySelector("#username-text-box").addEventListener("keypress", (e) =>
         chrome.runtime.sendMessage({request: 'change-username', username: e.target.value.trim()});
         e.target.value = "";
     }
-
 });
