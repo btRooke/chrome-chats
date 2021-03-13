@@ -28,7 +28,7 @@ class MessageBox {
 
         this.sendButton.addEventListener("click", () => this.sendMessage());
 
-        this.messageBarElement.onkeypress = (e) => {
+        this.element.onkeypress = (e) => {
             if (e.keyCode === 13) {
                 this.sendMessage();
             }
@@ -59,13 +59,22 @@ class MessageBox {
 
         let message = this.messageBarElement.value.trim();
 
-        if ("" === this.messageBarElement.value.trim()) {
-            return;
+        if (this.imagePrimed) {
+            chrome.runtime.sendMessage({
+               request: "send-image",
+               payload: this.primedImage
+            }, (resp) => console.log(resp));
+            this.clearPrimedImage();
         }
 
-        chrome.runtime.sendMessage({request: "send-message", payload: message}, (resp) => console.log(resp));
+        else {
 
-        this.messageBarElement.value = "";
+            if ("" !== this.messageBarElement.value.trim()) {
+                chrome.runtime.sendMessage({request: "send-message", payload: message}, (resp) => console.log(resp));
+                this.messageBarElement.value = "";
+            }
+        }
+
     }
 
     addImageMessage(nameString, dateString, imageFileBlob) {
@@ -166,9 +175,11 @@ class MessageBox {
 
         if (!this.imagePrimed) {
 
+            this.imagePrimed = true;
             this.primedImage = imageFile;
 
             this.messageBarElement.disabled = true;
+            this.messageBarElement.value = "";
 
             const reader = new FileReader();
 
@@ -189,10 +200,10 @@ class MessageBox {
     clearPrimedImage() {
         this.messageBarElement.disabled = false;
         this.primedImageContainer.style.display = "none";
+        this.imagePrimed = false;
     }
 
 }
 
 const elem = document.querySelector(".popup");
 const box = new MessageBox(elem);
-
