@@ -3,7 +3,12 @@ const app = require('express')();
 const http = require('http').createServer(app);
 
 const rooms = require("./rooms/rooms");
-const io = require('socket.io')(http);
+const io = require('socket.io')(http, {
+    cors: {
+        origin: "chrome-extension://*",
+        allowEIO3: true
+    }
+});
 
 const path = require('path');
 
