@@ -10,5 +10,9 @@
     "permissions": ["http://*/"],
     "action": {
         "default_popup": "popup_message_box.html"
+    },
+    "options_ui": {
+        "page": "options.html",
+        "chrome_style": true
     }
 }

@@ -1,17 +1,6 @@
+const db = require('../db')
 
 const ROOMS = {}
-
-class Room {
-    constructor(url) {
-        this.url = url
-        this.players = []
-        this.messages = []
-    }
-
-    addPlayer(player_name) {
-        this.players.push(player_name);
-    }
-}
 
 function roomManagement(io) {
     io.on('connection', (socket) => {
@@ -24,11 +13,13 @@ function roomManagement(io) {
 
 function joinRoom(io, socket) {
     socket.on('room-request', (data) => {
+        if (!ROOMS[data.url]) {
+            ROOMS[data.url] = db.getMessages(data.url, []);
+        }
         if (ROOMS[data.url] == undefined) {
             ROOMS[data.url] = new Room(data.url)
         }
 
-        ROOMS[data.url].addPlayer(data.username);
         socket.join(data.url);
 
         console.log(`Joined Room: ${JSON.stringify(ROOMS[data.url])}`)
@@ -41,6 +32,7 @@ function joinRoom(io, socket) {
 
 function sendMessage(io, socket, room, username) {
     socket.on('send-message', (data) => {
+        // db.sendMessage(data.url, {'username': data.username, 'payload': data.payload})
         console.log(`message received: ${JSON.stringify(data)}`);
 
         // Send the message to all players in the room.
