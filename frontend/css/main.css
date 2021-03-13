@@ -90,10 +90,12 @@ body {
 
 /* Send Bar */
 
+.popup .send_container {
+    margin: 0 1em 1em;
+}
+
 .popup .send_bar {
     display: flex;
-    margin: 1em;
-    margin-top: 0;
     align-items: center;
 }
 
@@ -103,6 +105,10 @@ body {
     padding: 0.5em;
     border: 2px black solid;
     border-radius: 3px;
+}
+
+.popup .message_bar:disabled {
+    background: darkgrey;
 }
 
 .popup .send_button {
@@ -123,6 +129,37 @@ body {
 }
 
 .popup .send_button:focus {
+    outline: none;
+}
+
+/* Primed Image */
+
+.popup .primed_image_container {
+    margin-bottom: 1em;
+    display: flex;
+    align-items: flex-start;
+}
+
+.primed_image_container .primed {
+    height: 60px;
+    border-radius: 5px;
+}
+
+.primed_image_container .unprime {
+    margin-left: 0.5em;
+}
+
+.popup .unprime:hover {
+    filter: invert(25%);
+    cursor: pointer;
+}
+
+.popup .unprime:active {
+    filter: invert(50%);
+    border: none;
+}
+
+.popup .unprime:focus {
     outline: none;
 }
 

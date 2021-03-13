@@ -2,11 +2,21 @@ class MessageBox {
 
     constructor(messageBoxElement) {
 
-        this.element = messageBoxElement;
+        this.imagePrimed = false;
+        this.primedImage = undefined;
 
+
+        // get elements
+
+        this.element = messageBoxElement;
         this.messagesElement = messageBoxElement.querySelector(".messages");
         this.messageBarElement = messageBoxElement.querySelector(".message_bar");
         this.sendButton = messageBoxElement.querySelector(".send_button");
+        this.primedImageElement = messageBoxElement.querySelector(".primed");
+        this.primedImageContainer = messageBoxElement.querySelector(".primed_image_container");
+        this.unprime = messageBoxElement.querySelector(".unprime");
+
+        // send button listeners
 
         this.sendButton.addEventListener("click", () => this.sendMessage());
 
@@ -16,12 +26,22 @@ class MessageBox {
             }
         }
 
+        // unprime listener
+
+        this.unprime.addEventListener("click", () => this.clearPrimedImage());
+
+        // set the title to be the title
+
         this.pageTitle = messageBoxElement.querySelector(".site_name");
 
         chrome.tabs.query(
             { active: true, currentWindow: true },
-            (tabs) => { console.log(tabs[0]); this.pageTitle.innerHTML = tabs[0].title }
+            (tabs) => { this.pageTitle.innerHTML = tabs[0].title }
         );
+
+        // paste listener
+
+        this.messageBarElement.addEventListener("paste", (e) => this.pasteHandler(e));
 
         this.scrollToBottom();
 
@@ -73,7 +93,50 @@ class MessageBox {
     }
 
     scrollToBottom() {
-        this.messagesElement.scrollTop = this.messagesElement.scrollHeight; 
+        if (this.messagesElement.scrollHeight) {
+            this.messagesElement.scrollTop = this.messagesElement.scrollHeight;
+        }
+    }
+
+    pasteHandler(e) {
+
+        const data = e.clipboardData;
+
+        if (data.types[0] === "Files" && data.files[0].type.match("image/.*")) {
+            this.primeImage(data.files[0]);
+            e.preventDefault();
+
+        }
+
+    }
+
+    primeImage(imageFile) {
+
+        if (!this.imagePrimed) {
+
+            this.primedImage = imageFile;
+
+            this.messageBarElement.disabled = true;
+
+            const reader = new FileReader();
+
+            reader.onload = e => {
+                this.primedImageElement.setAttribute("src", e.target.result);
+            }
+
+            reader.readAsDataURL(imageFile);
+
+            this.primedImageContainer.style.display = "flex";
+
+            this.scrollToBottom();
+
+        }
+
+    }
+
+    clearPrimedImage() {
+        this.messageBarElement.disabled = false;
+        this.primedImageContainer.style.display = "none";
     }
 
 }
