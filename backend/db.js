@@ -1,4 +1,5 @@
 const admin = require('firebase-admin');
+const fetch = require('node-fetch');
 const { v4: uuidv4 } = require('uuid');
 
 const db = admin.database();                // Messages stored here
