@@ -14,18 +14,24 @@ body {
 
 .popup .header {
     background-color: royalblue;
-    display: flex;
     align-items: center;
     padding: 1em;
 }
 
 .popup .site_name {
     font-size: 2em;
-    flex-grow: 2;
+    width: 290px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    float: left;
 }
 
 .popup .online_counter {
     font-size: 2em;
+    width: 110px;
+    float: right;
+    text-align: right;
 }
 
 /* Messages */
@@ -44,14 +50,25 @@ body {
 
 .popup .msg_meta {
     margin-right: 1em;
+    width: 7em;
+}
+
+.popup .msg_meta .sender_name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: bold;
 }
 
 .popup .msg_meta .time {
     font-style: italic;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .popup .content {
-    flex-grow: 2;
+    flex: 2;
 }
 
 .popup .message:not(:first-child) {
