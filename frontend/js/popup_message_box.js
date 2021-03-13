@@ -28,7 +28,7 @@ class MessageBox {
 
         this.sendButton.addEventListener("click", () => this.sendMessage());
 
-        this.element.onkeypress = (e) => {
+        document.onkeypress = (e) => {
             if (e.keyCode === 13) {
                 this.sendMessage();
             }
