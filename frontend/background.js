@@ -31,9 +31,10 @@ chrome.runtime.onMessage.addListener(
             case "send-message":
                 sendMessage(request.payload);
                 sendResponse("Message sent");
+                break;
             case "change-username":
-                console.log("username", request.username);
                 user.username = request.username;
+                break;
         }
     }
 )
