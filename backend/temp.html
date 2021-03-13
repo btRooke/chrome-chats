@@ -4,6 +4,18 @@
         </script>
         <script>
             const socket = io();
+
+            socket.emit("room-request", {
+               "username": "tim",
+                "url": "https://google.com"
+            });
+
+            socket.emit("send-message", {
+                "username": "tim",
+                "url": "https://google.com",
+                "payload": "hello everyone"
+            })
+
         </script>
     </head>
     <body>

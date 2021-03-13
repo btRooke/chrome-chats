@@ -2,5 +2,11 @@
     "name": "Untitled",
     "description": "Text Goes Here",
     "version": "0.1",
-    "manifest_version": 3
+    "manifest_version": 3,
+    "background": {
+        "scripts": [
+            "socket.io.js",
+            "background.js"
+        ]
+    }
 }
