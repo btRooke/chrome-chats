@@ -59,10 +59,6 @@ class MessageBox {
 
         let message = this.messageBarElement.value.trim();
 
-        if ("" === this.messageBarElement.value.trim()) {
-            return;
-        }
-
         if (this.imagePrimed) {
             chrome.runtime.sendMessage({
                request: "send-image",
@@ -72,8 +68,11 @@ class MessageBox {
         }
 
         else {
-            chrome.runtime.sendMessage({request: "send-message", payload: message}, (resp) => console.log(resp));
-            this.messageBarElement.value = "";
+
+            if ("" !== this.messageBarElement.value.trim()) {
+                chrome.runtime.sendMessage({request: "send-message", payload: message}, (resp) => console.log(resp));
+                this.messageBarElement.value = "";
+            }
         }
 
     }
@@ -176,6 +175,7 @@ class MessageBox {
 
         if (!this.imagePrimed) {
 
+            this.imagePrimed = true;
             this.primedImage = imageFile;
 
             this.messageBarElement.disabled = true;
@@ -200,6 +200,7 @@ class MessageBox {
     clearPrimedImage() {
         this.messageBarElement.disabled = false;
         this.primedImageContainer.style.display = "none";
+        this.imagePrimed = false;
     }
 
 }
