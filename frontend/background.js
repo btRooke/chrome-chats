@@ -23,6 +23,10 @@ socket.on("message", data => {
     user.messages.push(data);
 });
 
+socket.on("users-changed", numUsers => {
+    chrome.runtime.sendMessage({request: 'update-users', numUsers});
+});
+
 // request is in the form: { request, payload }
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
