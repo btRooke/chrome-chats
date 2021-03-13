@@ -1,3 +1,11 @@
+const urlRegex = /(?<url>https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g
+
+function processText(text) {
+    text = text.replace(urlRegex, `<a href="url">$<url></a>`);
+    return text
+
+}
+
 class MessageBox {
 
     constructor(messageBoxElement) {
@@ -122,7 +130,7 @@ class MessageBox {
 
         const content = document.createElement("div");
         content.setAttribute("class", "content");
-        content.innerHTML = contentString;
+        content.innerHTML = processText(contentString);
 
         meta.appendChild(name);
         meta.appendChild(time);
