@@ -207,3 +207,12 @@ class MessageBox {
 
 const elem = document.querySelector(".popup");
 const box = new MessageBox(elem);
+
+console.log("eekek");
+chrome.runtime.sendMessage({request: 'get-messages'}, function (messages) {
+    messages.forEach(messageObj => {
+        const time = new Date(messageObj.timestamp);
+        const timeString = `${time.getHours()}:${time.getMinutes()} ${time.getDate()}`;
+        box.addMessage(messageObj.username, timeString, messageObj.message);
+    });
+});

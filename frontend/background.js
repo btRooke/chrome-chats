@@ -20,7 +20,7 @@ socket.on("message", data => {
     console.log(`Message: ${data}`);
     // request is in the form: { request, payload }
     chrome.runtime.sendMessage({request: 'message', message: data})
-    user.messages.add(data);
+    user.messages.push(data);
 });
 
 // request is in the form: { request, payload }
@@ -36,6 +36,9 @@ chrome.runtime.onMessage.addListener(
             case "change-username":
                 user.username = request.username;
                 break;
+            case "get-messages":
+                sendResponse(user.messages);
+                break;
         }
     }
 )
@@ -50,7 +53,7 @@ function joinRoom(url) {
 
 function leaveCurrentRoom() {
     socket.emit("leave-room");
-    user.messages.clear();
+    user.messages = [];
 }
 
 chrome.tabs.onActivated.addListener(function(tab){
