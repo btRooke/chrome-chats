@@ -23,6 +23,7 @@ class MessageBox {
         this.primedImageElement = messageBoxElement.querySelector(".primed");
         this.primedImageContainer = messageBoxElement.querySelector(".primed_image_container");
         this.unprime = messageBoxElement.querySelector(".unprime");
+        this.onlineCounter = messageBoxElement.querySelector(".online_counter");
 
         // send button listeners
 
@@ -213,6 +214,10 @@ class MessageBox {
         this.messageBarElement.disabled = false;
         this.primedImageContainer.style.display = "none";
         this.imagePrimed = false;
+    }
+
+    updateNumberOfUsers(n) {
+        this.onlineCounter.innerHTML = `${n} Online`;
     }
 
 }
