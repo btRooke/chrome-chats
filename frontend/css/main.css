@@ -88,6 +88,12 @@ body {
     padding-bottom: 0.5em;
 }
 
+.popup .content_image {
+    max-width: 283px;
+    max-height: 450px;
+    border-radius: 8px;
+}
+
 /* Send Bar */
 
 .popup .send_container {
@@ -141,7 +147,8 @@ body {
 }
 
 .primed_image_container .primed {
-    height: 60px;
+    max-height: 60px;
+    max-width: 300px;
     border-radius: 5px;
 }
 
