@@ -1,20 +1,23 @@
 const db = require('../db')
+const crypto = require('crypto');
 
 const ROOMS = {}
 
 class Room {
-    constructor(url) {
+    constructor(url, io) {
         this.url = url;
+        this.hash = crypto.createHash('sha256').update(this.url).digest('hex');
         this.users = [];
         this.messages = [];
+        db.getMessages(this, io);
     }
 
     addUser(username) {
         this.users.push(username);
     }
 
-    addMessage(message) {
-        this.messages.push(message);
+    addMessage(username, payload) {
+        db.sendMessage(this.hash, {'username': username, 'message': payload})
     }
 }
 
@@ -29,35 +32,30 @@ function roomManagement(io) {
 
 function joinRoom(io, socket) {
     socket.on('room-request', (data) => {
-        /*if (!ROOMS[data.url]) {
-            ROOMS[data.url] = db.getMessages(data.url, []);
-        }*/
-        if (ROOMS[data.url] == undefined) {
-            ROOMS[data.url] = new Room(data.url)
+        console.log(`Join Request: ${JSON.stringify(data)}`);
+
+        let urlID = crypto.createHash('md5').update(data.url).digest('hex');
+        socket.join(urlID);
+
+        if (!ROOMS[urlID]) {
+            ROOMS[urlID] = new Room(data.url, io);
         }
 
-        socket.join(data.url);
+        let room = ROOMS[urlID];
 
-        ROOMS[data.url].addUser(data.username);
+        room.addUser(data.username);
 
-        console.log(`Joined Room: ${JSON.stringify(ROOMS[data.url])}`)
+        console.log(`Joined Room`)
 
-        socket.emit("joined-room", ROOMS[data.url]);
-        sendMessage(io, socket, ROOMS[data.url], data.username);
+        socket.emit("joined-room", {room: room.url});
+        sendMessage(io, socket, room, data.username);
     });
 }
 
-
 function sendMessage(io, socket, room, username) {
     socket.on('send-message', (data) => {
-        // db.sendMessage(data.url, {'username': data.username, 'payload': data.payload})
-        console.log(`message received: ${JSON.stringify(data)}`);
-
-        // Send the message to all players in the room.
-        console.log(`Rooms: ${JSON.stringify(room)}`);
-        room.addMessage(data.message);
-        io.to(room.url).emit('message', {username, message: data.message});
-    })
+        room.addMessage(username, data.message);
+    });
 }
 
 exports.roomManagement = roomManagement;

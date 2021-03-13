@@ -15,6 +15,7 @@ socket.on("ping", () => {
     console.log("connected");
 })
 
+
 socket.emit('room-request', {username: "tim", url: "http://google.com"});
 
 socket.on('joined-room', room => {
@@ -24,7 +25,7 @@ socket.on('joined-room', room => {
 socket.on("message", data => {
     console.log(`Message: ${data}`);
     // request is in the form: { request, payload }
-    chrome.runtime.sendMessage({request: 'message', payload: data})
+    chrome.runtime.sendMessage({request: 'message', message: data})
 });
 
 // request is in the form: { request, payload }
