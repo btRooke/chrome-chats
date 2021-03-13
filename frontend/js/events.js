@@ -8,7 +8,8 @@ chrome.runtime.onMessage.addListener(
         switch (request.request) {
             case "message":
                 let messageObj = request.payload;
-                box.addMessage(messageObj.username, (new Date()).getDate(), messageObj.message)
+                const time = new Date();
+                box.addMessage(messageObj.username, time.toLocaleTimeString("en-UK") + " ", messageObj.message)
         }
 
     }
