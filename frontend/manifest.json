@@ -1,6 +1,12 @@
 {
-    "name": "Untitled",
-    "description": "Text Goes Here",
+    "name": "Chrome Chats",
+    "description": "Text goes here.",
     "version": "0.1",
-    "manifest_version": 3
+    "manifest_version": 3,
+
+
+    "action": {
+        "default_popup": "popup_message_box.html"
+      }
+      
 }
