@@ -12,7 +12,6 @@ module.exports.getMessages = function(room, io) {
 
 module.exports.sendMessage = function(url, message) {
     message.timestamp = Date.now();
-
-    db.ref("sites/" + url).child('messages')
-        .push(message)
+    console.log(JSON.stringify(message));
+    db.ref("sites/" + url).child('messages').push(message)
 }

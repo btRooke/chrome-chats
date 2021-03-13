@@ -32,13 +32,14 @@ chrome.runtime.onMessage.addListener(
                 sendMessage(request.payload);
                 sendResponse("Message sent");
             case "change-username":
+                console.log("username", request.username);
                 user.username = request.username;
         }
     }
 )
 
 function sendMessage(payload) {
-    socket.emit("send-message", {message: payload});
+    socket.emit("send-message", {username: user.username, message: payload});
 }
 
 

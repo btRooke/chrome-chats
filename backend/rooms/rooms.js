@@ -46,13 +46,13 @@ function joinRoom(io, socket) {
         console.log(`Joined Room`)
 
         socket.emit("joined-room", {room: room.url});
-        sendMessage(io, socket, room, data.username);
+        sendMessage(io, socket, room);
     });
 }
 
-function sendMessage(io, socket, room, username) {
+function sendMessage(io, socket, room) {
     socket.on('send-message', (data) => {
-        room.addMessage(username, data.message);
+        room.addMessage(data.username, data.message);
     });
 }
 

@@ -1,6 +1,7 @@
 
-function changeUserName(event) {
-    chrome.runtime.sendMessage({request: 'change-username', username: event.target.value.trim()});
-    event.target.value = "";
-}
 
+document.querySelector("#username").addEventListener("keypress", (e) => {
+    if (e.key == "Enter") {
+        chrome.runtime.sendMessage({request: 'change-username', username: e.target.value.trim()});
+    }
+});
