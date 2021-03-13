@@ -217,7 +217,7 @@ class MessageBox {
     }
 
     updateNumberOfUsers(n) {
-        this.onlineCounter.innerHTML = `${n} Online`;
+        this.onlineCounter.innerHTML = `${n}`;
     }
 
 }
