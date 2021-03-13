@@ -7,16 +7,21 @@ class Room {
     constructor(url, io) {
         this.url = url;
         this.hash = crypto.createHash('sha256').update(this.url).digest('hex');
-        this.users = [];
         this.messages = [];
+        this.numUsers = 0;
         db.getMessages(this, io);
     }
 
-    addUser(username) {
-        this.users.push(username);
+    addUser() {
+        this.numUsers++;
+    }
+
+    removeUser() {
+        this.numUsers--;
     }
 
     addMessage(username, payload) {
+        console.log(`Message sent: ${JSON.stringify(payload)}`);
         db.addMessage(this.hash, {'username': username, 'message': payload});
     }
 
@@ -32,11 +37,24 @@ function roomManagement(io) {
     });
 }
 
-function leaveRoom(socket, room) {
+function leaveRoom(io, socket, room) {
     socket.on("leave-room", () => {
         socket.leave(room.hash);
+        room.removeUser();
+        emitUserUpdate(io, room, false);
     })
 }
+
+function emitUserUpdate(io, room, leave) {
+    if (leave)
+        room.removeUser();
+    else
+        room.addUser();
+
+    const numUsers = room.numUsers;
+    io.to(room.hash).emit("users-changed", numUsers);
+}
+
 
 function joinRoom(io, socket) {
     socket.on('room-request', (data) => {
@@ -54,10 +72,13 @@ function joinRoom(io, socket) {
 
         console.log(`Joined Room`)
 
+        emitUserUpdate(io, room, false);
+
         socket.emit("joined-room", {room: room.url});
+
         sendMessage(io, socket, room);
         sendImage(io, socket, room);
-        leaveRoom(socket, room);
+        leaveRoom(io, socket, room);
     });
 }
 
