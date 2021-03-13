@@ -7,7 +7,7 @@
         "scripts": ["socket.io.js", "background.js"],
         "persistent": true
     },
-    "permissions": ["http://*/", "activeTab"],
+    "permissions": ["http://*/", "activeTab", "tabs"],
     "browser_action": {
         "default_popup": "popup_message_box.html"
     },
