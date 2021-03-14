@@ -38,4 +38,4 @@ function handleError(err) {
 
 
 // Add models and export
-module.exports.messageConn = mongoose.connection.model('users', schema.messageSchema);
+module.exports.messageConn = mongoose.connection.model('messages', schema.messageSchema);
