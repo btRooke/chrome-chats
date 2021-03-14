@@ -5,10 +5,10 @@ const { v4: uuidv4 } = require('uuid');
 const db = admin.database();                // Messages stored here
 const images = admin.storage().bucket();    // Images stored here
 
-module.exports.getMessages = function(room, io, number) {
+module.exports.getMessages = function(room, io) {
     db.ref('sites/' + room.hash).child('messages')
         .orderByKey()
-        .limitToLast(number)
+        //.limitToLast(number)
         .on('child_added', (snapshot) => {
             loadMessage(snapshot, (doc) => {
                 room.messages.push(doc);
@@ -76,7 +76,6 @@ function loadMessage(doc, cb) {
         cb(doc);
     }
 }
-
 
 function loadImage(doc, cb) {
     let url = createDownloadUrl(images.name, doc.key, doc.message)
