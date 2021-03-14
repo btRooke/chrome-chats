@@ -97,9 +97,11 @@ function getMessages(io, socket) {
         let room = ROOMS[data.url];
         if (room) {
             let wanted = data.totalMessages + data.pagination;
-            if (wanted <= room.messages.length) {
+            let loaded = room.messages.length;
+
+            if (wanted <= loaded) {
                 console.log(room.messages.slice(wanted, data.totalMessages));
-                socket.emit("messages", room.messages.slice(wanted, data.totalMessages));
+                socket.emit("messages", room.messages.slice(loaded - wanted, loaded - data.totalMessages));
             } else {
                 query.getMessages(data.url, data.totalMessages, wanted, (messages) => {
                     if (messages) {
