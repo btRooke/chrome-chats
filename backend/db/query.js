@@ -11,25 +11,9 @@ module.exports.addMessage = function(url, username, message, isImage, cb) {
                 console.log(err);
                 cb(false);
             })
-            .then(() => save());
+            .then((b64) => save(url, username, b64, isImage, cb));
     } else {
-        save();
-    }
-
-    function save() {
-        let instance = new model({
-            'url': url,
-            'username': username,
-            'message': message,
-            'isImage': isImage
-        });
-
-        instance.save()
-            .catch(err => {
-                console.log(err);
-                cb(false);
-            })
-            .then(() => cb(true));
+        save(url, username, message, isImage, cb);
     }
 }
 
@@ -49,6 +33,22 @@ module.exports.getMessages = function(url, cb) {
             delete res._id;
             cb(res);
         });
+}
+
+function save(url, username, message, isImage, cb) {
+    let instance = new model({
+        'url': url,
+        'username': username,
+        'message': message,
+        'isImage': isImage
+    });
+
+    instance.save()
+        .catch(err => {
+            console.log(err);
+            cb(false);
+        })
+        .then(() => cb(true));
 }
 
 function blobToB64(blob) {
