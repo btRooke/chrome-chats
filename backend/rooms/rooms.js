@@ -43,6 +43,7 @@ function roomManagement(io) {
         sendMessage(io, socket);
         sendImage(io, socket);
         leaveRoom(io, socket);
+
     });
 }
 
@@ -87,25 +88,22 @@ function joinRoom(io, socket) {
 
         emitUserUpdate(io, room, false);
         socket.emit("joined-room", room.url);
-        getMessages(io, socket);
+        getMessages(io, socket, data.url);
     });
 }
 
 
-function getMessages(io, socket) {
-    socket.on('get-messages', (data) => {
-        let room = ROOMS[data.url];
-        if (room) {
-
-            query.getMessages(data.url, data.totalMessages, (messages) => {
-                if (messages) {
-                    room.messages.unshift(messages);
-                    console.log(messages);
-                    socket.emit("messages", messages);
-                }
-            });
-        }
-    });
+function getMessages(io, socket, url) {
+    let room = ROOMS[url];
+    if (room) {
+        query.getMessages(url, (messages) => {
+            if (messages) {
+                room.messages.unshift(messages);
+                console.log(messages);
+                socket.emit("messages", messages);
+            }
+        });
+    }
 }
 
 function sendMessage(io, socket) {

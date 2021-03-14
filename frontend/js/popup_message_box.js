@@ -309,7 +309,7 @@ class MessageBox {
             chrome.runtime.sendMessage({
                 request: "get-messages"
             }, (resp) => console.log(resp));
-        }*/
+        }
 
     }*/
 

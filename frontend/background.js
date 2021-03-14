@@ -78,11 +78,6 @@ function sendMessage(message) {
     socket.emit("send-message", {username: user.username, message, url: user.current_url});
 }
 
-function getMessages() {
-    console.log(`Requesting ${user.pagination} items of pagination, currently have ${user.length}.`);
-    socket.emit("get-messages", { url: user.current_url, totalMessages: user.messages.length, pagination: user.pagination });
-}
-
 function joinRoom(url) {
     socket.emit("room-request", {username: user.username, url});
 }
