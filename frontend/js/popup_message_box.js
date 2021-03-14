@@ -197,8 +197,9 @@ class MessageBox {
     pasteHandler(e) {
 
         const data = e.clipboardData;
+        // console.log(data, data.types, data.files);
 
-        if (data.types[0] === "Files" && data.files[0].type.match("image/.*")) {
+        if (data.files && data.files[0].type.match("image/.*")) {
             this.primeImage(data.files[0]);
             e.preventDefault();
 
