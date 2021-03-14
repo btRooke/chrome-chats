@@ -11,7 +11,7 @@ module.exports.addMessage = function(url, username, message, isImage, cb) {
                 console.log(err);
                 cb(false);
             })
-            .then(save);
+            .then(() => save());
     } else {
         save();
     }
