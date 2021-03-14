@@ -5,7 +5,8 @@ let user = {
     "username": "default",
     "pagination": 50,
     "current_url": undefined,
-    "messages": []
+    "messages": [],
+    "numUsers": 0
 }
 
 socket.on("ping", () => {
@@ -24,6 +25,7 @@ socket.on("message", data => {
 });
 
 socket.on("users-changed", numUsers => {
+    user.numUsers = numUsers;
     chrome.runtime.sendMessage({request: 'update-users', numUsers});
 });
 
@@ -40,8 +42,8 @@ chrome.runtime.onMessage.addListener(
             case "change-username":
                 user.username = request.username;
                 break;
-            case "get-messages":
-                sendResponse(user.messages);
+            case "request-data":
+                sendResponse(user);
                 break;
         }
     }
@@ -58,6 +60,7 @@ function joinRoom(url) {
 function leaveCurrentRoom() {
     socket.emit("leave-room");
     user.messages = [];
+    user.numUsers = 0;
 }
 
 chrome.tabs.onActivated.addListener(function(tab){

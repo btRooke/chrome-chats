@@ -11,18 +11,18 @@ chrome.runtime.onMessage.addListener(
                 const timeString = `${time.getHours()}:${time.getMinutes()} ${time.getDate()}`;
                 box.addMessage(messageObj.username, timeString, messageObj.message);
                 break;
-            case "users-changed":
-
+            case "update-users":
+                console.log("users updated!");
+                box.updateNumberOfUsers(request.numUsers);
                 break;
         }
     }
 );
 
 
-
-
-chrome.runtime.sendMessage({request: 'get-messages'}, function (messages) {
-    messages.forEach(messageObj => {
+chrome.runtime.sendMessage({request: 'request-data'}, function (resp) {
+    box.updateNumberOfUsers(resp.numUsers);
+    resp.messages.forEach(messageObj => {
         const time = new Date(messageObj.timestamp);
         const timeString = `${time.getHours()}:${time.getMinutes()} ${time.getDate()}`;
         box.addMessage(messageObj.username, timeString, messageObj.message);

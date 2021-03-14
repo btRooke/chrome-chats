@@ -39,9 +39,8 @@ function roomManagement(io) {
 
 function leaveRoom(io, socket, room) {
     socket.on("leave-room", () => {
+        emitUserUpdate(io, room, true);
         socket.leave(room.hash);
-        room.removeUser();
-        emitUserUpdate(io, room, false);
     })
 }
 
@@ -55,7 +54,6 @@ function emitUserUpdate(io, room, leave) {
     io.to(room.hash).emit("users-changed", numUsers);
 }
 
-
 function joinRoom(io, socket) {
     socket.on('room-request', (data) => {
         console.log(`Join Request: ${JSON.stringify(data)}`);
@@ -68,7 +66,6 @@ function joinRoom(io, socket) {
         }
 
         let room = ROOMS[urlID];
-        room.addUser(data.username);
 
         console.log(`Joined Room`)
 
