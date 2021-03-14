@@ -14,12 +14,3 @@ Chats are saved so you can ask questions and come back later, or peruse historic
 ![An example of the chat with messages and a picture of morrisons pasted in](.readme-assets/example-1.png) | ![An example of the chat with messages and other screenshots of code and urls.](.readme-assets/example-2.png)
 --- | --- 
 Example 1 | Example 2
-
-## Submission Video
-
-<iframe width="560" height="315"
-src="https://www.youtube.com/watch?v=01KvCFBE4KIU" 
-frameborder="0" 
-allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-allowfullscreen>
-</iframe>
