@@ -27,11 +27,17 @@ body {
     float: left;
 }
 
-.popup .online_counter {
+.popup .online_container {
     font-size: 2em;
     width: 110px;
     float: right;
-    text-align: right;
+    align-items: center;
+    flex-direction: row-reverse;
+    display: flex;
+}
+
+.popup .users {
+    margin-left: 0.5em;
 }
 
 /* Messages */
@@ -89,7 +95,7 @@ body {
 }
 
 .popup .content_image {
-    max-width: 283px;
+    max-width: 285px;
     max-height: 450px;
     border-radius: 8px;
 }
