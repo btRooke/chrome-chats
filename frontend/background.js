@@ -50,7 +50,7 @@ chrome.runtime.onMessage.addListener(
 )
 
 function sendMessage(payload) {
-    socket.emit("send-message", {username: user.username, message: payload});
+    socket.emit(payload.request, {username: user.username, message: payload});
 }
 
 function joinRoom(url) {
@@ -66,9 +66,24 @@ function leaveCurrentRoom() {
 chrome.tabs.onActivated.addListener(function(tab){
     chrome.tabs.get(tab.tabId, (tabObj) => {
         let url = tabObj.url;
-        leaveCurrentRoom();
-        joinRoom(url);
+        if (url != user.current_url) {
+            user.current_url = url;
+            leaveCurrentRoom();
+            joinRoom(url);
+        }
     })
 });
+
+chrome.tabs.onUpdated.addListener(function(tab){
+    chrome.tabs.get(tab, (tabObj) => {
+        let url = tabObj.url;
+        if (url != user.current_url) {
+            user.current_url = url;
+            leaveCurrentRoom();
+            joinRoom(url);
+        }
+    })
+});
+
 
 
