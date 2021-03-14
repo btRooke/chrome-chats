@@ -4,7 +4,7 @@ const socket = io("http://chat-rooms.ddns.net:2000/")
 let user = {
     "username": "default",
     "pagination": 50,
-    "current_url": undefined,
+    "current_url": "chrome-chat.ddns.net",
     "messages": [],
     "numUsers": 0
 }
