@@ -6,7 +6,12 @@ module.exports.addMessage = function(url, username, message, isImage, cb) {
     }
 
     if (isImage) {
-        blobToB64(message).then(save);
+        blobToB64(message)
+            .catch(err => {
+                console.log(err);
+                cb(false);
+            })
+            .then(save);
     } else {
         save();
     }
@@ -47,11 +52,15 @@ module.exports.getMessages = function(url, cb) {
 }
 
 function blobToB64(blob) {
-    return new Promise(((resolve) => {
+    return new Promise(((resolve, reject) => {
         const reader = new FileReader();
 
         reader.onloadend = () => {
             resolve(reader.result);
+        }
+
+        reader.onerror = err => {
+            reject(err);
         }
 
         reader.readAsDataURL(blob);
