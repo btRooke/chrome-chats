@@ -44,7 +44,6 @@ function roomManagement(io) {
         sendMessage(io, socket);
         sendImage(io, socket);
         leaveRoom(io, socket);
-        // getHistory(io, socket);
     });
 }
 
@@ -89,6 +88,7 @@ function joinRoom(io, socket) {
 
         emitUserUpdate(io, room, false);
         socket.emit("joined-room", room.url);
+        getHistory(room.url, io, socket);
     });
 }
 
@@ -97,7 +97,7 @@ function getHistory(url, socket) {
         console.log(`History: ${messages}`);
 
         if (messages)
-            socket.emit("messages", messages);
+            socket.emit("history", messages);
     });
 }
 
@@ -114,7 +114,6 @@ function sendMessage(io, socket) {
 
 function sendImage(io, socket) {
     socket.on('send-image', (data) => {
-        console.log(`${JSON.stringify(data)}`);
         let room = ROOMS[data.url];
         if (room) {
             room.addImage(data.username, data.message);

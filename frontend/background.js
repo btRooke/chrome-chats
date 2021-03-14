@@ -16,6 +16,7 @@ socket.on("ping", () => {
 
 socket.on('joined-room', url => {
     console.log(`room joined: ${JSON.stringify(url)}`);
+
     user.current_url = url;
 });
 
@@ -31,9 +32,9 @@ socket.on("users-changed", numUsers => {
     chrome.runtime.sendMessage({request: 'update-users', numUsers});
 });
 
-socket.on("get-history", messages => {
+socket.on("history", messages => {
+    console.log(messages);
     messages.forEach(msg => {
-        console.log(msg);
         user.messages.push(msg);
         chrome.runtime.sendMessage({request: "message", message: msg});
     });
@@ -63,7 +64,6 @@ chrome.runtime.onMessage.addListener(
             case "request-data":
                 sendResponse(user);
                 break;
-
         }
     }
 )
