@@ -185,7 +185,7 @@ class MessageBox {
     }
 
     isScrolledToBottom() {
-        return this.messagesElement.scrollHeight && this.messagesElement.scrollTop === this.messagesElement.scrollHeight;
+        return box.messagesElement.scrollHeight - box.messagesElement.scrollTop - box.messagesElement.offsetHeight === 0
     }
 
     scrollToBottom() {
