@@ -4,6 +4,8 @@
 
 This project was created over a gruelling 24 hours of non-stop programming for [Stacshack 2021](https://stacshack-007.devpost.com/)! It was, of course, completed virtually due to the pandemic.
 
+**Update**: We won the 2nd place prize out of 22 other submissions!
+
 ## What does it do?
 
 It creates a popup chat room for every link you visit. You can chat live to other people viewing that page. The chat also has support for copy and pasted images as well as autmatic URL hyperlinking. 
