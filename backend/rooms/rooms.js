@@ -1,5 +1,6 @@
-const db = require('../db')
+//const db = require('../db')
 const crypto = require('crypto');
+const query = require('../firebase-config/db/query')
 
 const ROOMS = {}
 
@@ -9,6 +10,7 @@ class Room {
         this.hash = urlID;
         this.messages = [];
         this.numUsers = 0;
+        this.io = io;
         db.getMessages(this, io);
     }
 
@@ -22,11 +24,16 @@ class Room {
 
     addMessage(username, payload) {
         console.log(`Message sent: ${JSON.stringify(payload)}`);
-        db.addMessage(this.hash, {'username': username, 'message': payload});
+        query.addMessage(this.hash, username, payload, false, (added) => {
+            if (added) {
+                this.io.of(this.hash).emit("message", "this worked");
+            }
+        }));
+        // db.addMessage(this.hash, {'username': username, 'message': payload});
     }
 
     addImage(username, payload) {
-        db.addImage(this.hash, {'username': username, 'message': payload, 'isImage': true});
+       // db.addImage(this.hash, {'username': username, 'message': payload, 'isImage': true});
     }
 }
 
