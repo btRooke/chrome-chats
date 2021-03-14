@@ -97,7 +97,7 @@ function getMessages(io, socket) {
         if (room) {
             let wanted = data.totalMessages + data.pagination;
             if (wanted <= room.messages.length) {
-                socket.emit("messages", room.messages.slice(wanted, data.totalMessages));
+                socket.emit("messages", room.messages.slice(data.totalMessages + 1, wanted + 1)).reverse();
             } else {
                 query.getMessages(data.url, data.totalMessages, wanted, (messages) => {
                     if (messages) {
