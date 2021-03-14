@@ -1,58 +1,57 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
     <link href="css/main.css" rel="stylesheet" type="text/css">
     <link href="css/options.css" rel="stylesheet" type="text/css">
     <title>Chrome Chats Extension Options</title>
-  </head>
-  <body>
+</head>
+<body>
 
+<div class="cent">
+
+    <div class="title">OPTIONS</div>
     <!-- https://developer.chrome.com/docs/extensions/mv2/options/ -->
 
-    <span>
-      <h4>Please enter your username</h4>
-      <div class="hideDIV">
-        &nbsp;&nbsp;&nbsp;<input id="username-text-box" type="text" name="username" value="">
-        <img src="assets/feather/info.svg" alt="Hover here for more information"/>
-      </div>
-      <div class="hide">Configure the public name associated with your comments.</div>
-    </span>
+    <div class="ocont">
+        <h4>Please enter your username</h4>
+        <div class="hideDIV">
+            <input id="username-text-box" type="text" name="username" value="">
+            <img src="assets/feather/info.svg" alt="Hover here for more information"/>
+        </div>
+        <div class="hide">Configure the public name associated with your comments.</div>
+    </div>
 
-    <br></br>
-
-    <span>
-      <h4>Select colour scheme</h4>
-      <div class="hideDIV">
-        &nbsp;&nbsp;&nbsp;<select id="colour">
-          <option value="Red">Red</option>
-          <option value="Green">Green</option>
-          <option value="Blue">Blue</option>
-          <option value="Yellow">Yellow</option>
+    <div class="ocont">
+        <h4>Select colour scheme</h4>
+        <div class="hideDIV">
+            &nbsp;&nbsp;&nbsp;<select id="colour">
+            <option value="Red">Red</option>
+            <option value="Green">Green</option>
+            <option value="Blue">Blue</option>
+            <option value="Yellow">Yellow</option>
         </select>
-        <img src="assets/feather/info.svg" alt="Hover here for more information"/>
-      </div>
-      <div class="hide">Configure the main colour theme style.</div>
-    </span>
+            <img src="assets/feather/info.svg" alt="Hover here for more information"/>
+        </div>
+        <div class="hide">Configure the main colour theme style.</div>
+    </div>
 
-    <br></br>
+    <div class="ocont">
+        <h4>Pagination</h4>
+        <div class="hideDIV">
+            &nbsp;&nbsp;&nbsp;<input id="pagination" type="number" min="0" max="250" step="50" value="100">
+            <img src="assets/feather/info.svg" alt="Hover here for more information"/>
+        </div>
+        <div class="hide">Configure the number of comments shown per page.</div>
+    </div>
 
-    <span>
-      <h4>Pagination</h4>
-      <div class="hideDIV">
-        &nbsp;&nbsp;&nbsp;<input id="pagination" type="number" min="0" max="250" step="50" value="100">
-        <img src="assets/feather/info.svg" alt="Hover here for more information"/>
-      </div>
-      <div class="hide">Configure the number of comments shown per page.</div>
-    </span>
-
-    <br></br>
-
-    <div id="status"></div>
     <button id="save">Save</button>
 
     <script src="js/options.js"></script>
 
-  </body>
+</div>
+
+</body>
+
 </html>
