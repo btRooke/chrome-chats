@@ -25,6 +25,7 @@ module.exports.getMessages = function(url, has, wants, cb) {
         .sort('-timestamp')
         .skip(has)
         .limit(wants)
+        .sort('timestamp')
         .catch(err => {
             console.log(err);
             cb(null);
