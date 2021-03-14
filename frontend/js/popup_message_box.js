@@ -61,21 +61,27 @@ class MessageBox {
         let message = this.messageBarElement.value.trim();
 
         if (this.imagePrimed) {
+
             chrome.runtime.sendMessage({
                request: "send-image",
                message: this.primedImage
             }, (resp) => console.log(resp));
+
             this.clearPrimedImage();
+
         }
 
         else {
 
             if ("" !== this.messageBarElement.value.trim()) {
+
                 chrome.runtime.sendMessage({
                     request: "send-message",
                     message: message
                 }, (resp) => console.log(resp));
+
                 this.messageBarElement.value = "";
+
             }
         }
 
