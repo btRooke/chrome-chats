@@ -11,16 +11,16 @@ module.exports.addMessage = function(url, username, message, isImage, cb) {
                 console.log(err);
                 cb(false);
             })
-            .then(() => save());
+            .then((b64) => save(b64));
     } else {
-        save();
+        save(message);
     }
 
-    function save() {
+    function save(payload) {
         let instance = new model({
             'url': url,
             'username': username,
-            'message': message,
+            'message': payload,
             'isImage': isImage
         });
 
