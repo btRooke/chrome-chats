@@ -68,7 +68,6 @@ class MessageBox {
             }, (resp) => console.log(resp));
 
             this.clearPrimedImage();
-
         }
 
         else {
@@ -215,6 +214,7 @@ class MessageBox {
 
             this.imagePrimed = true;
             this.primedImage = imageFile;
+            console.log(JSON.stringify(this.primedImage));
 
             this.messageBarElement.disabled = true;
             this.messageBarElement.value = "";

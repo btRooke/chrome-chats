@@ -61,7 +61,7 @@ chrome.runtime.onMessage.addListener(
 )
 
 function sendImage(message) {
-    socket.emit("send-image", {username: user.username, message});
+    socket.emit("send-image", {username: user.username, message, url: user.current_url});
 }
 
 function sendMessage(message) {
