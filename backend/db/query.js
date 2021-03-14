@@ -19,3 +19,7 @@ module.exports.addMessage = function(url, username, message, isImage, cb) {
         })
         .then(() => cb(true));
 }
+
+module.exports.getMessage = function(url, cb) {
+
+}
