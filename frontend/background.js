@@ -60,6 +60,10 @@ chrome.runtime.onMessage.addListener(
                 user.username = request.username;
                 break;
 
+            case "get-messages":
+                getMessages(request.message);
+                break;
+
             case "request-data":
                 sendResponse(user);
                 break;
@@ -75,6 +79,11 @@ function sendImage(message) {
 function sendMessage(message) {
     console.log(user.current_url);
     socket.emit("send-message", {username: user.username, message, url: user.current_url});
+}
+
+function getMessages(currentTotal) {
+    console.log(`Requesting ${user.pagination} items of pagination, currently have ${currentTotal}.`);
+    socket.emit("get-messages", { url: user.current_url, totalMessages: currentTotal, pagination: user.pagination });
 }
 
 function joinRoom(url) {

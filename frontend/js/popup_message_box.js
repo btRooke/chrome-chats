@@ -60,6 +60,10 @@ class MessageBox {
         this.unprime = messageBoxElement.querySelector(".unprime");
         this.onlineCounter = messageBoxElement.querySelector(".online_counter");
 
+        // scroll listener
+
+        this.messagesElement.addEventListener("scroll", () => this.scrollHandler());
+
         // send button listeners
 
         this.sendButton.addEventListener("click", () => this.sendMessage());
@@ -87,6 +91,7 @@ class MessageBox {
 
         this.messageBarElement.addEventListener("paste", (e) => this.pasteHandler(e));
 
+        this.clearPrimedImage();
         this.scrollToBottom();
 
     }
@@ -193,12 +198,13 @@ class MessageBox {
         const content = document.createElement("div");
         content.setAttribute("class", "content");
         content.innerHTML = processText(contentString);
+
         content.querySelectorAll("a").forEach(a => a.addEventListener("click", async (e) => {
 
             e.preventDefault();
             
             chrome.tabs.query({currentWindow: true, active: true}, (tab) => {
-                chrome.tabs.update(tab.id, {url: e.target.innerHTML});
+                chrome.tabs.create({url: e.target.innerHTML});
             });
 
             window.close();
@@ -232,13 +238,18 @@ class MessageBox {
 
     pasteHandler(e) {
 
-        const data = e.clipboardData;
-        // console.log(data, data.types, data.files);
+        this.load();
 
-        if (data.files && data.files[0].type.match("image/.*")) {
+        const data = e.clipboardData;
+        console.log(data, data.types, data.files);
+
+        if (data.files.length > 0 && data.files[0].type.match("image/.*")) {
             this.primeImage(data.files[0]);
             e.preventDefault();
+        }
 
+        else{
+            this.clearPrimedImage();
         }
 
     }
@@ -264,14 +275,17 @@ class MessageBox {
 
             reader.readAsDataURL(imageFile);
 
-            this.primedImageContainer.style.display = "flex";
-
             if (wasScrolledToBottom) {
                 this.scrollToBottom();
             }
 
         }
 
+    }
+
+    load() {
+        this.primedImageElement.setAttribute("src", "assets/loading.gif");
+        this.primedImageContainer.style.display = "flex";
     }
 
     clearPrimedImage() {
@@ -282,6 +296,17 @@ class MessageBox {
 
     updateNumberOfUsers(n) {
         this.onlineCounter.innerHTML = `${n}`;
+    }
+
+    scrollHandler() {
+
+        if (this.messagesElement.scrollHeight > this.messagesElement.offsetHeight && this.messagesElement.scrollTop === 0) {
+            chrome.runtime.sendMessage({
+                request: "get-messages",
+                message: this.messagesElement.childNodes.length
+            }, (resp) => console.log(resp));
+        }
+
     }
 
 }
