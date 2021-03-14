@@ -1,5 +1,4 @@
 //const db = require('../db')
-const crypto = require('crypto');
 const query = require('../db/query')
 
 const ROOMS = {}
@@ -41,10 +40,10 @@ class Room {
 function roomManagement(io) {
     io.on('connection', (socket) => {
         joinRoom(io, socket);
+        getMessages(io, socket);
         sendMessage(io, socket);
         sendImage(io, socket);
         leaveRoom(io, socket);
-        // getHistory(io, socket);
     });
 }
 
@@ -92,15 +91,24 @@ function joinRoom(io, socket) {
     });
 }
 
-function getHistory(url, socket) {
-    query.getMessages(url, (messages) => {
-        console.log(`History: ${messages}`);
-
-        if (messages)
-            socket.emit("messages", messages);
+function getMessages(io, socket) {
+    socket.on('get-messages', (data) => {
+        let room = ROOMS[data.url];
+        if (room) {
+            let wanted = data.totalMessages + data.pagination;
+            if (wanted <= room.messages.length) {
+                socket.emit("messages", room.messages.slice(wanted, data.totalMessages));
+            } else {
+                query.getMessages(data.url, data.totalMessages, wanted, (messages) => {
+                    if (messages) {
+                        room.messages.unshift(messages);
+                        socket.emit("messages", messages);
+                    }
+                })
+            }
+        }
     });
 }
-
 
 function sendMessage(io, socket) {
     socket.on('send-message', (data) => {
@@ -114,7 +122,6 @@ function sendMessage(io, socket) {
 
 function sendImage(io, socket) {
     socket.on('send-image', (data) => {
-        console.log(`${JSON.stringify(data)}`);
         let room = ROOMS[data.url];
         if (room) {
             room.addImage(data.username, data.message);

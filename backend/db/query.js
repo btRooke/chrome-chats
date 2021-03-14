@@ -20,17 +20,16 @@ module.exports.addMessage = function(url, username, message, isImage, cb) {
         .then(() => cb(true));
 }
 
-module.exports.getMessages = function(url, cb) {
+module.exports.getMessages = function(url, has, wants, cb) {
     model.find({'url': url})
+        .sort('-timestamp')
+        .skip(has)
+        .limit(wants)
         .catch(err => {
             console.log(err);
             cb(null);
         })
         .then(res => {
-            res.forEach((doc) => {
-                doc.timestamp = doc._id.getTimestamp();
-                delete doc._id;
-            });
             cb(res);
         });
 }

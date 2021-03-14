@@ -31,12 +31,10 @@ socket.on("users-changed", numUsers => {
     chrome.runtime.sendMessage({request: 'update-users', numUsers});
 });
 
-socket.on("get-history", messages => {
-    messages.forEach(msg => {
-        console.log(msg);
-        user.messages.push(msg);
-        chrome.runtime.sendMessage({request: "message", message: msg});
-    });
+socket.on("history", messages => {
+    console.log(JSON.stringify(messages));
+    user.messages = messages;
+    chrome.runtime.sendMessage({request: "add-messages", messages});
 });
 
 // request is in the form: { request, payload }
@@ -67,7 +65,6 @@ chrome.runtime.onMessage.addListener(
             case "request-data":
                 sendResponse(user);
                 break;
-
         }
     }
 )
@@ -100,7 +97,7 @@ chrome.tabs.onActivated.addListener(function(tab){
     chrome.tabs.get(tab.tabId, (tabObj) => {
         let url = tabObj.url;
         user.activeTab = tab.tabId;
-        if (url != user.current_url) {
+        if (url !== user.current_url) {
             leaveCurrentRoom();
             joinRoom(url);
         }
@@ -110,7 +107,7 @@ chrome.tabs.onActivated.addListener(function(tab){
 chrome.tabs.onUpdated.addListener(function(tabId){
     chrome.tabs.get(tabId, (tabObj) => {
         let url = tabObj.url;
-        if (url != user.current_url && user.activeTab == tabId) {
+        if (url !== user.current_url && user.activeTab === tabId) {
             leaveCurrentRoom();
             joinRoom(url);
         }

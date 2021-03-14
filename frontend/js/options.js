@@ -31,7 +31,7 @@ function save_options() {
 // Restores select box and checkbox state using the preferences
 // stored in chrome.storage.
 function restore_options() {
-    // Use default value colour = 'Red' and pagination = 100.
+    // Use default value colour = 'Red', pagination = 100.
     chrome.storage.sync.get({
         username: '',
         colour: 'Red',
