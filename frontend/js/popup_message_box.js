@@ -302,6 +302,15 @@ class MessageBox {
         this.onlineCounter.innerHTML = `${n}`;
     }
 
+    isScrolledToBottom() {
+        return box.messagesElement.scrollHeight - box.messagesElement.scrollTop - box.messagesElement.offsetHeight === 0
+    }
+
+    scrollToBottom() {
+        if (this.messagesElement.scrollHeight) {
+            this.messagesElement.scrollTop = this.messagesElement.scrollHeight;
+        }
+    }
 }
 
 
