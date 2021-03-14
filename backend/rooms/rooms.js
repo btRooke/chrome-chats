@@ -75,7 +75,7 @@ function joinRoom(io, socket) {
 
         sendMessage(io, socket, room);
         sendImage(io, socket, room);
-        leaveRoom(io, socket, room);
+        leaveRoom(io, socket, room)
     });
 }
 
