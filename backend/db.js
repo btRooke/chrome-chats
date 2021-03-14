@@ -114,6 +114,7 @@ module.exports.addMessage = function(hash, message) {
     message.timestamp = Date.now();
     message.imageURL = null;
 
+    console.log(`message: ${JSON.stringify(message)}`);
     db.ref('sites/' + hash).child('messages').push(message);
 }
 

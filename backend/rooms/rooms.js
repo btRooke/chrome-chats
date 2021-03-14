@@ -100,9 +100,13 @@ function sendMessage(io, socket) {
     });
 }
 
-function sendImage(io, socket,) {
+function sendImage(io, socket) {
     socket.on('send-image', (data) => {
-        room.addImage(data.username, data.message);
+        let room = ROOMS[generateRoomID(data.url)];
+
+        if (room) {
+            room.addImage(data.username, data.message);
+        }
     });
 }
 
