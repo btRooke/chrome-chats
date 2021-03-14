@@ -96,22 +96,16 @@ function getMessages(io, socket) {
         let room = ROOMS[data.url];
 
         console.log(JSON.stringify(data));
-        if (!room) {
-            return null;
-        }
 
-        if (!room.messages) {
-            query.getMessages(data.url, data.totalMessages, (messages) => {
-                if (messages) {
-                    room.messages = messages;
+        query.getMessages(data.url, data.totalMessages, (messages) => {
+            if (messages) {
+                room.messages = messages;
 
-                    console.log(JSON.stringify(messages));
-                    socket.emit("messages", messages);
-                }
-            });
-        } else {
-            return room.messages;
-        }
+                console.log(JSON.stringify(messages));
+                socket.emit("messages", messages);
+            }
+        });
+
     });
 }
 

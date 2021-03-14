@@ -304,5 +304,7 @@ class MessageBox {
 
 }
 
+
+
 const elem = document.querySelector(".popup");
 const box = new MessageBox(elem);

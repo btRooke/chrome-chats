@@ -106,13 +106,3 @@ chrome.tabs.onActivated.addListener(function(tab){
         }
     })
 });
-
-chrome.tabs.onUpdated.addListener(function(tabId){
-    chrome.tabs.get(tabId, (tabObj) => {
-        let url = tabObj.url;
-        if (url !== user.current_url && user.activeTab === tabId) {
-            leaveCurrentRoom();
-            joinRoom(url);
-        }
-    })
-});
