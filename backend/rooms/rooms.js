@@ -23,7 +23,7 @@ class Room {
         console.log(`Message sent: ${JSON.stringify(payload)}`);
         query.addMessage(this.url, username, payload, false, (added) => {
             if (added) {
-                console.log(`Message added to database`);
+                this.messages.push(added);
             }
         });
         // db.addMessage(this.hash, {'username': username, 'message': payload});
@@ -32,7 +32,7 @@ class Room {
     addImage(username, payload) {
         console.log(`Image sent`);
         query.addMessage(this.url, username, payload, true, (added) => {
-            console.log("Image added!");
+            this.messages.push(added)
         });
     }
 }
@@ -43,7 +43,6 @@ function roomManagement(io) {
         sendMessage(io, socket);
         sendImage(io, socket);
         leaveRoom(io, socket);
-
     });
 }
 

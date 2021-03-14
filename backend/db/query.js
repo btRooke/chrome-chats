@@ -22,7 +22,6 @@ module.exports.addMessage = function(url, username, message, isImage, cb) {
 
 module.exports.getMessages = function(url, cb) {
     model.find({'url': url})
-        .sort({timestamp: -1})
         .sort({timestamp: 1})
         .catch(err => {
             console.log(err);
