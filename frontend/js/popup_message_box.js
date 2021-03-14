@@ -302,16 +302,6 @@ class MessageBox {
         this.onlineCounter.innerHTML = `${n}`;
     }
 
-
-    /*scrollHandler() {
-        /*
-        if (this.messagesElement.scrollHeight > this.messagesElement.offsetHeight && this.messagesElement.scrollTop === 0) {
-            chrome.runtime.sendMessage({
-                request: "get-messages"
-            }, (resp) => console.log(resp));
-        }*/
-
-
 }
 
 const elem = document.querySelector(".popup");
