@@ -28,7 +28,7 @@ class Room {
             if (added) {
                 this.io.of(this.hash).emit("message", "this worked");
             }
-        }));
+        });
         // db.addMessage(this.hash, {'username': username, 'message': payload});
     }
 
