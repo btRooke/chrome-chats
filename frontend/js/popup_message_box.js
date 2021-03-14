@@ -81,7 +81,6 @@ class MessageBox {
                 }, (resp) => console.log(resp));
 
                 this.clearPrimedImage();
-
             });
 
         }

@@ -97,7 +97,7 @@ function sendMessage(io, socket) {
         let room = ROOMS[data.url];
         if (room) {
             room.addMessage(data.username, data.message);
-            io.in(data.url).emit("message", {username: data.username, message: data.message, timestamp: (new Date())});
+            io.in(data.url).emit("message", {username: data.username, message: data.message, timestamp: new Date(), image: false});
         }
     });
 }
@@ -108,6 +108,7 @@ function sendImage(io, socket) {
         let room = ROOMS[data.url];
         if (room) {
             room.addImage(data.username, data.message);
+            io.in(data.url).emit("message", {username: data.username, message: data.message, image: true, timestamp: new Date()});
         }
     });
 }

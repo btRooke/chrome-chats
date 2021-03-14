@@ -9,7 +9,13 @@ chrome.runtime.onMessage.addListener(
                 console.log(`Message: ${JSON.stringify(messageObj)}`)
                 const time = new Date(messageObj.timestamp);
                 const timeString = `${time.getHours()}:${time.getMinutes()} ${time.getDate()}/${time.getMonth()}/${time.getFullYear()}`;
-                box.addMessage(messageObj.username, timeString, messageObj.message);
+
+                if (!messageObj.image) {
+                    box.addMessage(messageObj.username, timeString, messageObj.message);
+                } else {
+                    // Cpmvert the image from base 65
+                }
+
                 break;
             case "update-users":
                 console.log("users updated!");
