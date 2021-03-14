@@ -1,5 +1,4 @@
 //const db = require('../db')
-const crypto = require('crypto');
 const query = require('../db/query')
 
 const ROOMS = {}

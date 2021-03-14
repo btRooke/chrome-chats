@@ -88,7 +88,7 @@ chrome.tabs.onActivated.addListener(function(tab){
     chrome.tabs.get(tab.tabId, (tabObj) => {
         let url = tabObj.url;
         user.activeTab = tab.tabId;
-        if (url != user.current_url) {
+        if (url !== user.current_url) {
             leaveCurrentRoom();
             joinRoom(url);
         }
@@ -98,7 +98,7 @@ chrome.tabs.onActivated.addListener(function(tab){
 chrome.tabs.onUpdated.addListener(function(tabId){
     chrome.tabs.get(tabId, (tabObj) => {
         let url = tabObj.url;
-        if (url != user.current_url && user.activeTab == tabId) {
+        if (url !== user.current_url && user.activeTab === tabId) {
             leaveCurrentRoom();
             joinRoom(url);
         }
