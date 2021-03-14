@@ -24,7 +24,7 @@ class Room {
         console.log(`Message sent: ${JSON.stringify(payload)}`);
         query.addMessage(this.url, username, payload, false, (added) => {
             if (added) {
-                this.io.of(this.url).emit("message", {username, message: payload});
+                this.io.in(this.url).emit("message", {username, message: payload});
             }
         });
         // db.addMessage(this.hash, {'username': username, 'message': payload});
