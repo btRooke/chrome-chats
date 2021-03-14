@@ -113,14 +113,12 @@ class MessageBox {
         else {
 
             if ("" !== message) {
-
                 chrome.runtime.sendMessage({
                     request: "send-message",
                     message: message
                 }, (resp) => console.log(resp));
 
                 this.messageBarElement.value = "";
-
             }
 
         }

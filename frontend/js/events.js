@@ -13,9 +13,10 @@ chrome.runtime.onMessage.addListener(
                     box.addMessage(messageObj.username, timeString, messageObj.message);
                 } else {
                     // Convert the image to base 64.
-                    let blob = blobFromBase64(messageObj.message);
-                    box.addImageMessage(messageObj.username, timeString, blob);
-
+                    console.log(`${JSON.stringify(messageObj)}`);
+                    blobFromBase64(messageObj.message).then(blob => {
+                        box.addImageMessage(messageObj.username, timeString, blob);
+                    });
                 }
 
                 break;
