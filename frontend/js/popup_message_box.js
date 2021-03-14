@@ -106,7 +106,7 @@ class MessageBox {
 
                 this.clearPrimedImage();
 
-            })
+            });
 
         }
 
