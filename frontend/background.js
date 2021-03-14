@@ -50,7 +50,7 @@ chrome.runtime.onMessage.addListener(
 )
 
 function sendMessage(payload) {
-    socket.emit("send-message", {username: user.username, message: payload});
+    socket.emit(payload.request, {username: user.username, message: payload});
 }
 
 function joinRoom(url) {
