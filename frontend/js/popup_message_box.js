@@ -63,7 +63,7 @@ class MessageBox {
         if (this.imagePrimed) {
             chrome.runtime.sendMessage({
                request: "send-image",
-               payload: this.primedImage
+               message: this.primedImage
             }, (resp) => console.log(resp));
             this.clearPrimedImage();
         }
@@ -71,7 +71,10 @@ class MessageBox {
         else {
 
             if ("" !== this.messageBarElement.value.trim()) {
-                chrome.runtime.sendMessage({request: "send-message", payload: message}, (resp) => console.log(resp));
+                chrome.runtime.sendMessage({
+                    request: "send-message",
+                    message: message
+                }, (resp) => console.log(resp));
                 this.messageBarElement.value = "";
             }
         }
