@@ -179,49 +179,53 @@ class MessageBox {
 
     addMessage(nameString, dateString, contentString) {
 
-        const wasScrolledToBottom = this.isScrolledToBottom();
+        if (contentString !== undefined) {
 
-        const message = document.createElement("div");
-        message.setAttribute("class", "message");
+            const wasScrolledToBottom = this.isScrolledToBottom();
 
-        const meta = document.createElement("div");
-        meta.setAttribute("class", "msg_meta");
+            const message = document.createElement("div");
+            message.setAttribute("class", "message");
 
-        const name = document.createElement("div");
-        name.setAttribute("class", "sender_name");
-        name.innerHTML = nameString;
+            const meta = document.createElement("div");
+            meta.setAttribute("class", "msg_meta");
 
-        const time = document.createElement("div");
-        time.setAttribute("class", "time");
-        time.innerHTML = dateString;
+            const name = document.createElement("div");
+            name.setAttribute("class", "sender_name");
+            name.innerHTML = nameString;
 
-        const content = document.createElement("div");
-        content.setAttribute("class", "content");
-        content.innerHTML = processText(contentString);
+            const time = document.createElement("div");
+            time.setAttribute("class", "time");
+            time.innerHTML = dateString;
 
-        content.querySelectorAll("a").forEach(a => a.addEventListener("click", async (e) => {
+            const content = document.createElement("div");
+            content.setAttribute("class", "content");
+            content.innerHTML = processText(contentString);
 
-            e.preventDefault();
-            
-            chrome.tabs.query({currentWindow: true, active: true}, (tab) => {
-                chrome.tabs.create({url: e.target.innerHTML});
-            });
+            content.querySelectorAll("a").forEach(a => a.addEventListener("click", async (e) => {
 
-            window.close();
+                e.preventDefault();
 
-        }));
+                chrome.tabs.query({currentWindow: true, active: true}, (tab) => {
+                    chrome.tabs.create({url: e.target.innerHTML});
+                });
+
+                window.close();
+
+            }));
 
 
-        meta.appendChild(name);
-        meta.appendChild(time);
+            meta.appendChild(name);
+            meta.appendChild(time);
 
-        message.appendChild(meta);
-        message.appendChild(content);
+            message.appendChild(meta);
+            message.appendChild(content);
 
-        this.messagesElement.appendChild(message);
+            this.messagesElement.appendChild(message);
 
-        if (wasScrolledToBottom) {
-            this.scrollToBottom();
+            if (wasScrolledToBottom) {
+                this.scrollToBottom();
+            }
+
         }
 
     }
