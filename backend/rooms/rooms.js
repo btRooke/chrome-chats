@@ -85,9 +85,9 @@ function sendMessage(io, socket, room) {
     });
 }
 
-function sendImage(io, socket, room, username) {
+function sendImage(io, socket, room) {
     socket.on('send-image', (data) => {
-        room.addImage(username, data.message);
+        room.addImage(data.username, data.message);
     });
 }
 
