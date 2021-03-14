@@ -8,3 +8,51 @@
   display: block;
   color: purple;
 }
+
+.hideDIV {
+  display: flex;
+  align-content: center;
+}
+
+.hideDIV img {
+  margin-left: 1em;
+}
+
+span > * {
+
+}
+
+.title {
+  font-size: 5em;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 0.65em;
+}
+
+.cent {
+  width: 40%;
+  margin: auto;
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+}
+
+.ocont {
+  border: solid black 2px;
+  border-radius: 10px;
+  margin-bottom: 2em;
+  display: grid;
+  align-content: center;
+  padding: 1em;
+}
+
+.hide {
+  margin-top: 1em;
+}
+
+#save {
+  font-size: 2em;
+  padding: 1.5em;
+  margin-left: 5em;
+  margin-right: 5em;
+}
