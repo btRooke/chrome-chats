@@ -90,6 +90,8 @@ class MessageBox {
 
     addImageMessage(nameString, dateString, imageFileBlob) {
 
+        const wasScrolledToBottom = this.isScrolledToBottom();
+
         const message = document.createElement("div");
         message.setAttribute("class", "message");
 
@@ -128,11 +130,15 @@ class MessageBox {
 
         content.appendChild(image);
 
-        this.scrollToBottom();
+        if (wasScrolledToBottom) {
+            this.scrollToBottom();
+        }
 
     }
 
     addMessage(nameString, dateString, contentString) {
+
+        const wasScrolledToBottom = this.isScrolledToBottom();
 
         const message = document.createElement("div");
         message.setAttribute("class", "message");
@@ -172,8 +178,14 @@ class MessageBox {
 
         this.messagesElement.appendChild(message);
 
-        this.scrollToBottom();
+        if (wasScrolledToBottom) {
+            this.scrollToBottom();
+        }
 
+    }
+
+    isScrolledToBottom() {
+        return this.messagesElement.scrollHeight && this.messagesElement.scrollTop === this.messagesElement.scrollHeight;
     }
 
     scrollToBottom() {
@@ -198,6 +210,8 @@ class MessageBox {
 
         if (!this.imagePrimed) {
 
+            const wasScrolledToBottom = this.isScrolledToBottom();
+
             this.imagePrimed = true;
             this.primedImage = imageFile;
 
@@ -214,7 +228,9 @@ class MessageBox {
 
             this.primedImageContainer.style.display = "flex";
 
-            this.scrollToBottom();
+            if (wasScrolledToBottom) {
+                this.scrollToBottom();
+            }
 
         }
 
