@@ -40,6 +40,7 @@ function roomManagement(io) {
 function leaveRoom(io, socket, room) {
     socket.on("leave-room", () => {
         emitUserUpdate(io, room, true);
+        console.log("Left Room");
         socket.leave(room.hash);
     })
 }
@@ -66,7 +67,6 @@ function joinRoom(io, socket) {
         }
 
         let room = ROOMS[urlID];
-
         console.log(`Joined Room`)
 
         emitUserUpdate(io, room, false);
