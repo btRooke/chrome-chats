@@ -32,18 +32,29 @@ class Room {
 
 function roomManagement(io) {
     io.on('connection', (socket) => {
-        io.emit('ping');
         joinRoom(io, socket);
+        sendMessage(io, socket);
+        sendImage(io, socket);
+        leaveRoom(io, socket)
     });
 }
 
-function leaveRoom(io, socket, room) {
-    socket.on("leave-room", () => {
-        try {
-            socket.leave(room.hash);
-                emitUserUpdate(io, room, true);
-        } catch (e) {
-            console.log("couldnt leave room")
+function generateRoomID(url) {
+    return crypto.createHash('sha256').update(url).digest('hex');
+}
+
+function leaveRoom(io, socket) {
+    socket.on("leave-room", (url) => {
+        if (url) {
+            let room = ROOMS[generateRoomID(url)];
+            if (room) {
+                try {
+                    socket.leave(room.hash);
+                    emitUserUpdate(io, room, true);
+                } catch (e) {
+                    console.log("couldn't leave room")
+                }
+            }
         }
     })
 }
@@ -62,7 +73,7 @@ function joinRoom(io, socket) {
     socket.on('room-request', (data) => {
         console.log(`Join Request: ${JSON.stringify(data)}`);
 
-        let urlID = crypto.createHash('sha256').update(data.url).digest('hex');
+        let urlID = generateRoomID(data.url);
 
         socket.join(urlID);
 
@@ -75,22 +86,21 @@ function joinRoom(io, socket) {
 
         emitUserUpdate(io, room, false);
 
-        socket.emit("joined-room", {room: room.url});
-
-        sendMessage(io, socket, room);
-        sendImage(io, socket, room);
-        leaveRoom(io, socket, room)
+        socket.emit("joined-room", room.url);
     });
 }
 
-function sendMessage(io, socket, room) {
+function sendMessage(io, socket) {
     socket.on('send-message', (data) => {
-        console.log(`${JSON.stringify(data)}`);
-        room.addMessage(data.username, data.message);
+        let room = ROOMS[generateRoomID(data.url)];
+        if (room) {
+            console.log(`${JSON.stringify(data)}`);
+            room.addMessage(data.username, data.message);
+        }
     });
 }
 
-function sendImage(io, socket, room) {
+function sendImage(io, socket,) {
     socket.on('send-image', (data) => {
         room.addImage(data.username, data.message);
     });
