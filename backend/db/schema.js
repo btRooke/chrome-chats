@@ -21,4 +21,9 @@ module.exports.messageSchema = new Schema(
             type: Boolean,
             default: false
         }
-});
+}, {
+        timestamps: {
+            currentTime: () => Date.now(),
+            createdAt: 'timestamp'
+        }
+    });

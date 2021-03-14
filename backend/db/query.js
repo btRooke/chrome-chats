@@ -27,10 +27,6 @@ module.exports.getMessages = function(url, cb) {
             cb(null);
         })
         .then(res => {
-            res.forEach((doc) => {
-                doc.timestamp = doc._id.getTimestamp();
-                delete doc._id;
-            });
             cb(res);
         });
 }
