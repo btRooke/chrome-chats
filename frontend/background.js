@@ -1,5 +1,6 @@
 const socket = io("http://chat-rooms.ddns.net:2000/")
 
+
 let user = {
     "username": "default",
     "pagination": 50,
@@ -12,8 +13,9 @@ socket.on("ping", () => {
     console.log("connected");
 })
 
-socket.on('joined-room', room => {
-    console.log(`room joined: ${JSON.stringify(room)}`);
+socket.on('joined-room', url => {
+    console.log(`room joined: ${JSON.stringify(url)}`);
+    user.current_url = url;
 });
 
 socket.on("message", data => {
@@ -27,8 +29,6 @@ socket.on("users-changed", numUsers => {
     user.numUsers = numUsers;
     chrome.runtime.sendMessage({request: 'update-users', numUsers});
 });
-
-
 
 // request is in the form: { request, payload }
 chrome.runtime.onMessage.addListener(
@@ -64,7 +64,8 @@ function sendImage(message) {
 }
 
 function sendMessage(message) {
-    socket.emit("send-message", {username: user.username, message});
+    console.log(user.current_url);
+    socket.emit("send-message", {username: user.username, message, url: user.current_url});
 }
 
 function joinRoom(url) {
@@ -72,11 +73,20 @@ function joinRoom(url) {
 }
 
 function leaveCurrentRoom() {
-    socket.emit("leave-room");
+    socket.emit("leave-room", user.current_url);
     user.messages = [];
     user.numUsers = 0;
 }
 
-joinRoom("www.google.com");
+chrome.tabs.onActivated.addListener(function(tab){
+    chrome.tabs.get(tab.tabId, (tabObj) => {
+        let url = tabObj.url;
+        if (url != user.current_url) {
+            leaveCurrentRoom();
+            joinRoom(url);
+        }
+    })
+});
+
 
 
