@@ -97,15 +97,16 @@ class MessageBox {
 
         if (this.imagePrimed) {
 
-            toBase64(this.primedImage, d => {
+            blobToBase64(this.primedImage).then(b => {
 
                 chrome.runtime.sendMessage({
                     request: "send-image",
-                    message: d
+                    message: b
                 }, (resp) => console.log(resp));
 
                 this.clearPrimedImage();
-            });
+
+            })
 
         }
 
