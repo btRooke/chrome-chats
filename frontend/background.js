@@ -17,6 +17,7 @@ socket.on("ping", () => {
 socket.on('joined-room', url => {
     console.log(`room joined: ${JSON.stringify(url)}`);
     user.current_url = url;
+    getMessages();
 });
 
 socket.on("message", data => {
@@ -43,7 +44,6 @@ chrome.runtime.onMessage.addListener(
         console.log(`Request: ${JSON.stringify(request)}`);
 
         switch (request.request) {
-
             case "send-message":
                 sendMessage(request.message);
                 sendResponse("Message sent");
@@ -78,9 +78,9 @@ function sendMessage(message) {
     socket.emit("send-message", {username: user.username, message, url: user.current_url});
 }
 
-function getMessages(currentTotal) {
-    console.log(`Requesting ${user.pagination} items of pagination, currently have ${currentTotal}.`);
-    socket.emit("get-messages", { url: user.current_url, totalMessages: currentTotal, pagination: user.pagination });
+function getMessages() {
+    console.log(`Requesting ${user.pagination} items of pagination, currently have ${user.length}.`);
+    socket.emit("get-messages", { url: user.current_url, totalMessages: user.length, pagination: user.pagination });
 }
 
 function joinRoom(url) {
@@ -92,6 +92,7 @@ function leaveCurrentRoom() {
     user.messages = [];
     user.numUsers = 0;
 }
+
 
 chrome.tabs.onActivated.addListener(function(tab){
     chrome.tabs.get(tab.tabId, (tabObj) => {
