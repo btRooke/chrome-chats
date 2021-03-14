@@ -20,6 +20,15 @@ module.exports.addMessage = function(url, username, message, isImage, cb) {
         .then(() => cb(true));
 }
 
-module.exports.getMessage = function(url, cb) {
-
+module.exports.getMessages = function(url, cb) {
+    model.find({'url': url})
+        .catch(err => {
+            console.log(err);
+            cb(null);
+        })
+        .then(res => {
+            res.timestamp = res._id.getTimestamp();
+            delete res._id;
+            cb(res);
+        });
 }
