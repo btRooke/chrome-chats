@@ -2,7 +2,7 @@ const model = require('./db').messageConn;
 
 module.exports.addMessage = function(url, username, message, isImage, cb) {
     if (!url || !username || !message) {
-        cb(false);
+        cb(null);
     }
 
     let instance = new model({
@@ -15,22 +15,19 @@ module.exports.addMessage = function(url, username, message, isImage, cb) {
     instance.save()
         .catch(err => {
             console.log(err);
-            cb(false);
+            cb(null);
         })
-        .then(() => cb(true));
+        .then(() => cb(instance));
 }
 
 module.exports.getMessages = function(url, has, cb) {
     model.find({'url': url})
-        .sort({timestamp: -1})
-        .skip(has)
         .sort({timestamp: 1})
         .catch(err => {
             console.log(err);
             cb(null);
         })
         .then(res => {
-            res.forEach(doc => console.log(doc.timestamp));
             cb(res);
         });
 }

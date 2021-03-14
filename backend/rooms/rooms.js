@@ -23,16 +23,15 @@ class Room {
         console.log(`Message sent: ${JSON.stringify(payload)}`);
         query.addMessage(this.url, username, payload, false, (added) => {
             if (added) {
-                console.log(`Message added to database`);
+                this.messages.push(added);
             }
         });
-        // db.addMessage(this.hash, {'username': username, 'message': payload});
     }
 
     addImage(username, payload) {
         console.log(`Image sent`);
         query.addMessage(this.url, username, payload, true, (added) => {
-            console.log("Image added!");
+            this.messages.push(added)
         });
     }
 }
@@ -40,6 +39,7 @@ class Room {
 function roomManagement(io) {
     io.on('connection', (socket) => {
         joinRoom(io, socket);
+        getMessages(io, socket);
         sendMessage(io, socket);
         sendImage(io, socket);
         leaveRoom(io, socket);
@@ -87,7 +87,6 @@ function joinRoom(io, socket) {
 
         emitUserUpdate(io, room, false);
         socket.emit("joined-room", room.url);
-        getMessages(io, socket);
     });
 }
 
@@ -95,15 +94,19 @@ function joinRoom(io, socket) {
 function getMessages(io, socket) {
     socket.on('get-messages', (data) => {
         let room = ROOMS[data.url];
-        if (room) {
+        if (!room) {
+            return null;
+        }
 
+        if (!room.messages) {
             query.getMessages(data.url, data.totalMessages, (messages) => {
                 if (messages) {
-                    room.messages.unshift(messages);
-                    console.log(messages);
+                    room.messages = messages;
                     socket.emit("messages", messages);
                 }
             });
+        } else {
+            return room.messages;
         }
     });
 }
