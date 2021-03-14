@@ -1,8 +1,43 @@
-const urlRegex = /(?<url>https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g
+const urlRegex = /(?<url>https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g;
 
 function processText(text) {
     text = text.replace(urlRegex, `<a class="popup_url" href="url">$<url></a>`);
-    return text
+    return text;
+
+}
+
+function blobToBase64(fileBlob) {
+
+    return new Promise((resolve, reject) => {
+
+        let reader = new FileReader();
+        reader.readAsDataURL(fileBlob);
+
+        reader.onloadend = function() {
+            resolve(reader.result)
+        }
+
+    })
+
+}
+
+function blobFromBase64(dataurl) {
+
+    return new Promise((resolve, reject) => {
+
+        let arr = dataurl.split(','),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+
+        resolve(new File([u8arr], "file", {type:mime}));
+
+    })
 
 }
 
@@ -24,6 +59,10 @@ class MessageBox {
         this.primedImageContainer = messageBoxElement.querySelector(".primed_image_container");
         this.unprime = messageBoxElement.querySelector(".unprime");
         this.onlineCounter = messageBoxElement.querySelector(".online_counter");
+
+        // scroll listener
+
+      //  this.messagesElement.addEventListener("scroll", () => this.scrollHandler());
 
         // send button listeners
 
@@ -52,6 +91,7 @@ class MessageBox {
 
         this.messageBarElement.addEventListener("paste", (e) => this.pasteHandler(e));
 
+        this.clearPrimedImage();
         this.scrollToBottom();
 
     }
@@ -62,26 +102,28 @@ class MessageBox {
 
         if (this.imagePrimed) {
 
-            chrome.runtime.sendMessage({
-               request: "send-image",
-               message: this.primedImage
-            }, (resp) => console.log(resp));
+            blobToBase64(this.primedImage).then(b => {
 
-            this.clearPrimedImage();
+                chrome.runtime.sendMessage({
+                    request: "send-image",
+                    message: b
+                }, (resp) => console.log(resp));
+
+                this.clearPrimedImage();
+
+            });
 
         }
 
         else {
 
-            if ("" !== this.messageBarElement.value.trim()) {
-
+            if ("" !== message) {
                 chrome.runtime.sendMessage({
                     request: "send-message",
                     message: message
                 }, (resp) => console.log(resp));
 
                 this.messageBarElement.value = "";
-
             }
 
         }
@@ -124,62 +166,66 @@ class MessageBox {
 
         reader.onload = e => {
             image.setAttribute("src", e.target.result);
+            if (wasScrolledToBottom) {
+                this.scrollToBottom();
+            }
         }
 
         reader.readAsDataURL(imageFileBlob);
 
         content.appendChild(image);
 
-        if (wasScrolledToBottom) {
-            this.scrollToBottom();
-        }
-
     }
 
     addMessage(nameString, dateString, contentString) {
 
-        const wasScrolledToBottom = this.isScrolledToBottom();
+        if (contentString !== undefined) {
 
-        const message = document.createElement("div");
-        message.setAttribute("class", "message");
+            const wasScrolledToBottom = this.isScrolledToBottom();
 
-        const meta = document.createElement("div");
-        meta.setAttribute("class", "msg_meta");
+            const message = document.createElement("div");
+            message.setAttribute("class", "message");
 
-        const name = document.createElement("div");
-        name.setAttribute("class", "sender_name");
-        name.innerHTML = nameString;
+            const meta = document.createElement("div");
+            meta.setAttribute("class", "msg_meta");
 
-        const time = document.createElement("div");
-        time.setAttribute("class", "time");
-        time.innerHTML = dateString;
+            const name = document.createElement("div");
+            name.setAttribute("class", "sender_name");
+            name.innerHTML = nameString;
 
-        const content = document.createElement("div");
-        content.setAttribute("class", "content");
-        content.innerHTML = processText(contentString);
-        content.querySelectorAll("a").forEach(a => a.addEventListener("click", async (e) => {
+            const time = document.createElement("div");
+            time.setAttribute("class", "time");
+            time.innerHTML = dateString;
 
-            e.preventDefault();
-            
-            chrome.tabs.query({currentWindow: true, active: true}, (tab) => {
-                chrome.tabs.update(tab.id, {url: e.target.innerHTML});
-            });
+            const content = document.createElement("div");
+            content.setAttribute("class", "content");
+            content.innerHTML = processText(contentString);
 
-            window.close();
+            content.querySelectorAll("a").forEach(a => a.addEventListener("click", async (e) => {
 
-        }));
+                e.preventDefault();
+
+                chrome.tabs.query({currentWindow: true, active: true}, (tab) => {
+                    chrome.tabs.create({url: e.target.innerHTML});
+                });
+
+                window.close();
+
+            }));
 
 
-        meta.appendChild(name);
-        meta.appendChild(time);
+            meta.appendChild(name);
+            meta.appendChild(time);
 
-        message.appendChild(meta);
-        message.appendChild(content);
+            message.appendChild(meta);
+            message.appendChild(content);
 
-        this.messagesElement.appendChild(message);
+            this.messagesElement.appendChild(message);
 
-        if (wasScrolledToBottom) {
-            this.scrollToBottom();
+            if (wasScrolledToBottom) {
+                this.scrollToBottom();
+            }
+
         }
 
     }
@@ -196,12 +242,18 @@ class MessageBox {
 
     pasteHandler(e) {
 
-        const data = e.clipboardData;
+        this.load();
 
-        if (data.types[0] === "Files" && data.files[0].type.match("image/.*")) {
+        const data = e.clipboardData;
+        console.log(data, data.types, data.files);
+
+        if (data.files.length > 0 && data.files[0].type.match("image/.*")) {
             this.primeImage(data.files[0]);
             e.preventDefault();
+        }
 
+        else{
+            this.clearPrimedImage();
         }
 
     }
@@ -214,6 +266,7 @@ class MessageBox {
 
             this.imagePrimed = true;
             this.primedImage = imageFile;
+            console.log(this.primedImage);
 
             this.messageBarElement.disabled = true;
             this.messageBarElement.value = "";
@@ -226,14 +279,17 @@ class MessageBox {
 
             reader.readAsDataURL(imageFile);
 
-            this.primedImageContainer.style.display = "flex";
-
             if (wasScrolledToBottom) {
                 this.scrollToBottom();
             }
 
         }
 
+    }
+
+    load() {
+        this.primedImageElement.setAttribute("src", "assets/loading.gif");
+        this.primedImageContainer.style.display = "flex";
     }
 
     clearPrimedImage() {
@@ -246,7 +302,18 @@ class MessageBox {
         this.onlineCounter.innerHTML = `${n}`;
     }
 
+    isScrolledToBottom() {
+        return box.messagesElement.scrollHeight - box.messagesElement.scrollTop - box.messagesElement.offsetHeight === 0
+    }
+
+    scrollToBottom() {
+        if (this.messagesElement.scrollHeight) {
+            this.messagesElement.scrollTop = this.messagesElement.scrollHeight;
+        }
+    }
 }
+
+
 
 const elem = document.querySelector(".popup");
 const box = new MessageBox(elem);

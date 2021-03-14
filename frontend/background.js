@@ -17,6 +17,7 @@ socket.on("ping", () => {
 socket.on('joined-room', url => {
     console.log(`room joined: ${JSON.stringify(url)}`);
     user.current_url = url;
+    getMessages();
 });
 
 socket.on("message", data => {
@@ -31,13 +32,20 @@ socket.on("users-changed", numUsers => {
     chrome.runtime.sendMessage({request: 'update-users', numUsers});
 });
 
+socket.on("messages", messages => {
+    console.log(JSON.stringify(messages));
+    user.messages = messages;
+    messages.forEach(msg => {
+        chrome.runtime.sendMessage({request: "message", msg});
+    });
+});
+
 // request is in the form: { request, payload }
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         console.log(`Request: ${JSON.stringify(request)}`);
 
         switch (request.request) {
-
             case "send-message":
                 sendMessage(request.message);
                 sendResponse("Message sent");
@@ -52,21 +60,29 @@ chrome.runtime.onMessage.addListener(
                 user.username = request.username;
                 break;
 
+            case "get-messages":
+                getMessages(request.message);
+                break;
+
             case "request-data":
                 sendResponse(user);
                 break;
-
         }
     }
 )
 
 function sendImage(message) {
-    socket.emit("send-image", {username: user.username, message});
+    socket.emit("send-image", {username: user.username, message, url: user.current_url});
 }
 
 function sendMessage(message) {
     console.log(user.current_url);
     socket.emit("send-message", {username: user.username, message, url: user.current_url});
+}
+
+function getMessages() {
+    console.log(`Requesting ${user.pagination} items of pagination, currently have ${user.length}.`);
+    socket.emit("get-messages", { url: user.current_url, totalMessages: user.messages.length, pagination: user.pagination });
 }
 
 function joinRoom(url) {
@@ -79,26 +95,14 @@ function leaveCurrentRoom() {
     user.numUsers = 0;
 }
 
+
 chrome.tabs.onActivated.addListener(function(tab){
     chrome.tabs.get(tab.tabId, (tabObj) => {
         let url = tabObj.url;
         user.activeTab = tab.tabId;
-        if (url != user.current_url) {
+        if (url !== user.current_url) {
             leaveCurrentRoom();
             joinRoom(url);
         }
     })
 });
-
-chrome.tabs.onUpdated.addListener(function(tabId){
-    chrome.tabs.get(tabId, (tabObj) => {
-        let url = tabObj.url;
-        if (url != user.current_url && user.activeTab == tabId) {
-            leaveCurrentRoom();
-            joinRoom(url);
-        }
-    })
-});
-
-
-
