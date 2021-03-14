@@ -36,7 +36,7 @@ chrome.runtime.onMessage.addListener(
 
         switch (request.request) {
             case "send-message":
-                sendMessage(request.payload);
+                sendMessage(request.message);
                 sendResponse("Message sent");
                 break;
             case "change-username":
@@ -49,8 +49,8 @@ chrome.runtime.onMessage.addListener(
     }
 )
 
-function sendMessage(payload) {
-    socket.emit(payload.request, {username: user.username, message: payload.message});
+function sendMessage(message) {
+    socket.emit("send-message", {username: user.username, message});
 }
 
 function joinRoom(url) {

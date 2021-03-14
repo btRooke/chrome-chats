@@ -81,6 +81,7 @@ function joinRoom(io, socket) {
 
 function sendMessage(io, socket, room) {
     socket.on('send-message', (data) => {
+        console.log(`${JSON.stringify(data)}`);
         room.addMessage(data.username, data.message);
     });
 }
