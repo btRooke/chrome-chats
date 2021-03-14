@@ -6,6 +6,17 @@ function processText(text) {
 
 }
 
+function toBase64(blob, callback) {
+    var reader = new FileReader();
+    reader.onload = function() {
+        var dataUrl = reader.result;
+        var base64 = dataUrl.split(',')[1];
+        callback(base64);
+    };
+    reader.readAsDataURL(blob);
+
+}
+
 class MessageBox {
 
     constructor(messageBoxElement) {
@@ -62,17 +73,22 @@ class MessageBox {
 
         if (this.imagePrimed) {
 
-            chrome.runtime.sendMessage({
-               request: "send-image",
-               message: this.primedImage
-            }, (resp) => console.log(resp));
+            toBase64(this.primedImage, d => {
 
-            this.clearPrimedImage();
+                chrome.runtime.sendMessage({
+                    request: "send-image",
+                    message: d
+                }, (resp) => console.log(resp));
+
+                this.clearPrimedImage();
+
+            });
+
         }
 
         else {
 
-            if ("" !== this.messageBarElement.value.trim()) {
+            if ("" !== message) {
 
                 chrome.runtime.sendMessage({
                     request: "send-message",
@@ -214,7 +230,7 @@ class MessageBox {
 
             this.imagePrimed = true;
             this.primedImage = imageFile;
-            console.log(JSON.stringify(this.primedImage));
+            console.log(this.primedImage);
 
             this.messageBarElement.disabled = true;
             this.messageBarElement.value = "";
