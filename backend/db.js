@@ -12,6 +12,7 @@ module.exports.getMessages = function(room, io) {
         .on('child_added', (snapshot) => {
             loadMessage(snapshot, (doc) => {
                 room.messages.push(doc);
+                console.log(JSON.stringify(doc));
                 //room.loadedMessages++;
                 io.to(room.hash).emit('message', doc);
             });

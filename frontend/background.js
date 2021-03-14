@@ -6,7 +6,8 @@ let user = {
     "pagination": 50,
     "current_url": "chrome-chat.ddns.net",
     "messages": [],
-    "numUsers": 0
+    "numUsers": 0,
+    "activeTab": 0
 }
 
 socket.on("ping", () => {
@@ -81,7 +82,18 @@ function leaveCurrentRoom() {
 chrome.tabs.onActivated.addListener(function(tab){
     chrome.tabs.get(tab.tabId, (tabObj) => {
         let url = tabObj.url;
+        user.activeTab = tab.tabId;
         if (url != user.current_url) {
+            leaveCurrentRoom();
+            joinRoom(url);
+        }
+    })
+});
+
+chrome.tabs.onUpdated.addListener(function(tabId){
+    chrome.tabs.get(tabId, (tabObj) => {
+        let url = tabObj.url;
+        if (url != user.current_url && user.activeTab == tabId) {
             leaveCurrentRoom();
             joinRoom(url);
         }
