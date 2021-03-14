@@ -16,5 +16,10 @@ module.exports.messageSchema = new Schema(
         message: {
             type: String,
             required: true
+        },
+
+        isImage: {
+            type: Boolean,
+            default: false
         }
 });
