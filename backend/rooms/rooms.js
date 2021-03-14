@@ -4,9 +4,9 @@ const crypto = require('crypto');
 const ROOMS = {}
 
 class Room {
-    constructor(url, io) {
+    constructor(url, io, urlID) {
         this.url = url;
-        this.hash = crypto.createHash('sha256').update(this.url).digest('hex');
+        this.hash = urlID;
         this.messages = [];
         this.numUsers = 0;
         db.getMessages(this, io);
@@ -39,9 +39,12 @@ function roomManagement(io) {
 
 function leaveRoom(io, socket, room) {
     socket.on("leave-room", () => {
-        emitUserUpdate(io, room, true);
-        console.log("Left Room");
-        socket.leave(room.hash);
+        try {
+            socket.leave(room.hash);
+                emitUserUpdate(io, room, true);
+        } catch (e) {
+            console.log("couldnt leave room")
+        }
     })
 }
 
@@ -60,10 +63,11 @@ function joinRoom(io, socket) {
         console.log(`Join Request: ${JSON.stringify(data)}`);
 
         let urlID = crypto.createHash('sha256').update(data.url).digest('hex');
+
         socket.join(urlID);
 
         if (!ROOMS[urlID]) {
-            ROOMS[urlID] = new Room(data.url, io);
+            ROOMS[urlID] = new Room(data.url, io, urlID);
         }
 
         let room = ROOMS[urlID];

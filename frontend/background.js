@@ -1,6 +1,5 @@
 const socket = io("http://chat-rooms.ddns.net:2000/")
 
-
 let user = {
     "username": "default",
     "pagination": 50,
@@ -28,6 +27,8 @@ socket.on("users-changed", numUsers => {
     user.numUsers = numUsers;
     chrome.runtime.sendMessage({request: 'update-users', numUsers});
 });
+
+
 
 // request is in the form: { request, payload }
 chrome.runtime.onMessage.addListener(
@@ -76,16 +77,6 @@ function leaveCurrentRoom() {
     user.numUsers = 0;
 }
 
-chrome.tabs.onActivated.addListener(function(tab){
-    chrome.tabs.get(tab.tabId, (tabObj) => {
-        let url = tabObj.url;
-        if (url != tab.url) {
-            user.current_url = url;
-            leaveCurrentRoom();
-            joinRoom(url);
-        }
-    })
-});
-
+joinRoom("www.google.com");
 
 
