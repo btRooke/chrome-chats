@@ -161,15 +161,14 @@ class MessageBox {
 
         reader.onload = e => {
             image.setAttribute("src", e.target.result);
+            if (wasScrolledToBottom) {
+                this.scrollToBottom();
+            }
         }
 
         reader.readAsDataURL(imageFileBlob);
 
         content.appendChild(image);
-
-        if (wasScrolledToBottom) {
-            this.scrollToBottom();
-        }
 
     }
 
