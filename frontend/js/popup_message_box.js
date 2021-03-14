@@ -1,8 +1,8 @@
-const urlRegex = /(?<url>https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g
+const urlRegex = /(?<url>https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g;
 
 function processText(text) {
     text = text.replace(urlRegex, `<a class="popup_url" href="url">$<url></a>`);
-    return text
+    return text;
 
 }
 
@@ -302,8 +302,7 @@ class MessageBox {
 
         if (this.messagesElement.scrollHeight > this.messagesElement.offsetHeight && this.messagesElement.scrollTop === 0) {
             chrome.runtime.sendMessage({
-                request: "get-messages",
-                message: this.messagesElement.childNodes.length
+                request: "get-messages"
             }, (resp) => console.log(resp));
         }
 
