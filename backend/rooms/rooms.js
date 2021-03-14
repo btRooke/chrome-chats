@@ -24,7 +24,7 @@ class Room {
         console.log(`Message sent: ${JSON.stringify(payload)}`);
         query.addMessage(this.url, username, payload, false, (added) => {
             if (added) {
-                this.io.in(this.url).emit("message", {username, message: payload});
+                console.log(`Message added to database`);
             }
         });
         // db.addMessage(this.hash, {'username': username, 'message': payload});
@@ -50,7 +50,7 @@ function leaveRoom(io, socket) {
             let room = ROOMS[url];
             if (room) {
                 try {
-                    socket.leave(room.hash);
+                    socket.leave(room.url);
                     emitUserUpdate(io, room, true);
                 } catch (e) {
                     console.log("couldn't leave room")
@@ -67,7 +67,7 @@ function emitUserUpdate(io, room, leave) {
         room.addUser();
 
     const numUsers = room.numUsers;
-    io.to(room.hash).emit("users-changed", numUsers);
+    io.to(room.url).emit("users-changed", numUsers);
 }
 
 function joinRoom(io, socket) {
@@ -95,6 +95,7 @@ function sendMessage(io, socket) {
         if (room) {
             console.log(`${JSON.stringify(data)}`);
             room.addMessage(data.username, data.message);
+            io.in(data.url).emit("message", {username: data.username, message: data.message, timestamp: (new Date())});
         }
     });
 }
