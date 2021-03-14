@@ -31,7 +31,10 @@ class Room {
     }
 
     addImage(username, payload) {
-       // db.addImage(this.hash, {'username': username, 'message': payload, 'isImage': true});
+        console.log(`Image sent`);
+        query.addMessage(this.url, username, payload, true, (added) => {
+            console.log("Image added!");
+        });
     }
 }
 
@@ -93,19 +96,19 @@ function sendMessage(io, socket) {
     socket.on('send-message', (data) => {
         let room = ROOMS[data.url];
         if (room) {
-            console.log(`${JSON.stringify(data)}`);
             room.addMessage(data.username, data.message);
-            io.in(data.url).emit("message", {username: data.username, message: data.message, timestamp: (new Date())});
+            io.in(data.url).emit("message", {username: data.username, message: data.message, timestamp: new Date(), image: false});
         }
     });
 }
 
 function sendImage(io, socket) {
     socket.on('send-image', (data) => {
+        console.log(`${JSON.stringify(data)}`);
         let room = ROOMS[data.url];
-
         if (room) {
             room.addImage(data.username, data.message);
+            io.in(data.url).emit("message", {username: data.username, message: data.message, image: true, timestamp: new Date()});
         }
     });
 }
