@@ -16,7 +16,6 @@ socket.on("ping", () => {
 
 socket.on('joined-room', url => {
     console.log(`room joined: ${JSON.stringify(url)}`);
-
     user.current_url = url;
 });
 
@@ -33,11 +32,9 @@ socket.on("users-changed", numUsers => {
 });
 
 socket.on("history", messages => {
-    console.log(messages);
-    messages.forEach(msg => {
-        user.messages.push(msg);
-        chrome.runtime.sendMessage({request: "message", message: msg});
-    });
+    console.log(JSON.stringify(messages));
+    user.messages = messages;
+    chrome.runtime.sendMessage({request: "add-messages", messages});
 });
 
 // request is in the form: { request, payload }
