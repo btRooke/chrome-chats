@@ -9,7 +9,19 @@
     },
     "permissions": ["http://*/", "activeTab", "tabs", "webNavigation"],
     "browser_action": {
-        "default_popup": "popup_message_box.html"
+        "default_popup": "popup_message_box.html",
+        "default_icon": {
+            "16": "assets/icons/logo_16.png",
+            "32": "assets/icons/logo_32.png",
+            "48": "assets/icons/logo_48.png",
+            "128": "assets/icons/logo_128.png"
+        }
+    },
+    "icons": {
+        "16": "assets/icons/logo_16.png",
+        "32": "assets/icons/logo_32.png",
+        "48": "assets/icons/logo_48.png",
+        "128": "assets/icons/logo_128.png"
     },
     "options_ui": {
         "page": "options.html",
