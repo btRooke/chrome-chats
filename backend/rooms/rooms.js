@@ -41,6 +41,7 @@ class Room {
 function roomManagement(io) {
     io.on('connection', (socket) => {
         joinRoom(io, socket);
+        getMessages(io, socket);
         sendMessage(io, socket);
         sendImage(io, socket);
         leaveRoom(io, socket);
@@ -88,19 +89,27 @@ function joinRoom(io, socket) {
 
         emitUserUpdate(io, room, false);
         socket.emit("joined-room", room.url);
-        getHistory(room.url, io, socket);
     });
 }
 
-function getHistory(url, socket) {
-    query.getMessages(url, (messages) => {
-        console.log(`History: ${messages}`);
-
-        if (messages)
-            socket.emit("history", messages);
+function getMessages(io, socket) {
+    socket.on('get-messages', (data) => {
+        let room = ROOMS[data.url];
+        if (room) {
+            let wanted = data.totalMessages + data.pagination;
+            if (wanted <= room.messages.length) {
+                socket.emit("messages", room.messages.slice(wanted, data.totalMessages));
+            } else {
+                query.getMessages(data.url, data.totalMessages, wanted, (messages) => {
+                    if (messages) {
+                        room.messages.unshift(messages);
+                        socket.emit("messages", messages);
+                    }
+                })
+            }
+        }
     });
 }
-
 
 function sendMessage(io, socket) {
     socket.on('send-message', (data) => {
