@@ -62,7 +62,7 @@ class MessageBox {
 
         // scroll listener
 
-        this.messagesElement.addEventListener("scroll", () => this.scrollHandler());
+      //  this.messagesElement.addEventListener("scroll", () => this.scrollHandler());
 
         // send button listeners
 
@@ -302,15 +302,16 @@ class MessageBox {
         this.onlineCounter.innerHTML = `${n}`;
     }
 
-    scrollHandler() {
 
+    /*scrollHandler() {
+        /*
         if (this.messagesElement.scrollHeight > this.messagesElement.offsetHeight && this.messagesElement.scrollTop === 0) {
             chrome.runtime.sendMessage({
                 request: "get-messages"
             }, (resp) => console.log(resp));
-        }
+        }*/
 
-    }
+    }*/
 
 }
 

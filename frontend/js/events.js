@@ -39,8 +39,8 @@ function addMessage(messageObj) {
 
 chrome.runtime.sendMessage({request: 'request-data'}, function (resp) {
     box.updateNumberOfUsers(resp.numUsers);
-    resp.messages = resp.messages.sort();
     resp.messages.forEach(messageObj => {
+        console.log(`${messageObj} bruh`)
         addMessage(messageObj);
     });
 });

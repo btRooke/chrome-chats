@@ -96,21 +96,14 @@ function getMessages(io, socket) {
     socket.on('get-messages', (data) => {
         let room = ROOMS[data.url];
         if (room) {
-            let wanted = data.totalMessages + data.pagination;
-            let loaded = room.messages.length;
 
-            if (wanted <= loaded) {
-                console.log(room.messages.slice(wanted, data.totalMessages));
-                socket.emit("messages", room.messages.slice(loaded - wanted, loaded - data.totalMessages));
-            } else {
-                query.getMessages(data.url, data.totalMessages, wanted, (messages) => {
-                    if (messages) {
-                        room.messages.unshift(messages);
-                        console.log(messages);
-                        socket.emit("messages", messages);
-                    }
-                })
-            }
+            query.getMessages(data.url, data.totalMessages, (messages) => {
+                if (messages) {
+                    room.messages.unshift(messages);
+                    console.log(messages);
+                    socket.emit("messages", messages);
+                }
+            });
         }
     });
 }

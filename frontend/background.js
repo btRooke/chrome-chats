@@ -34,7 +34,7 @@ socket.on("users-changed", numUsers => {
 
 socket.on("messages", messages => {
     console.log(JSON.stringify(messages));
-    user.messages = messages;
+    user.messages.push(messages);
     chrome.runtime.sendMessage({request: "add-messages", messages});
 });
 
@@ -80,7 +80,7 @@ function sendMessage(message) {
 
 function getMessages() {
     console.log(`Requesting ${user.pagination} items of pagination, currently have ${user.length}.`);
-    socket.emit("get-messages", { url: user.current_url, totalMessages: user.length, pagination: user.pagination });
+    socket.emit("get-messages", { url: user.current_url, totalMessages: user.messages.length, pagination: user.pagination });
 }
 
 function joinRoom(url) {
