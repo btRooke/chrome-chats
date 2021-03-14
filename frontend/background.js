@@ -63,10 +63,10 @@ function leaveCurrentRoom() {
     user.numUsers = 0;
 }
 
-chrome.tabs.onUpdated.addListener(function(tab){
-    chrome.tabs.get(tab, (tabObj) => {
+chrome.tabs.onActivated.addListener(function(tab){
+    chrome.tabs.get(tab.tabId, (tabObj) => {
         let url = tabObj.url;
-        if (url != user.current_url) {
+        if (url != tab.url) {
             user.current_url = url;
             leaveCurrentRoom();
             joinRoom(url);
