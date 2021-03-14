@@ -35,19 +35,32 @@ chrome.runtime.onMessage.addListener(
         console.log(`Request: ${JSON.stringify(request)}`);
 
         switch (request.request) {
+
             case "send-message":
                 sendMessage(request.message);
                 sendResponse("Message sent");
                 break;
+
+            case "send-image":
+                sendImage(request.message);
+                sendResponse("Image sent");
+                break;
+
             case "change-username":
                 user.username = request.username;
                 break;
+
             case "request-data":
                 sendResponse(user);
                 break;
+
         }
     }
 )
+
+function sendImage(message) {
+    socket.emit("send-image", {username: user.username, message});
+}
 
 function sendMessage(message) {
     socket.emit("send-message", {username: user.username, message});
