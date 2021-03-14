@@ -1,3 +1,6 @@
+
+
+
 chrome.runtime.onMessage.addListener(
     (request, sender, sendResponse) => {
         console.log(`request: ${JSON.stringify(request)}`)
@@ -12,10 +15,11 @@ chrome.runtime.onMessage.addListener(
                 box.updateNumberOfUsers(request.numUsers);
                 break;
             case "add-messages":
-                console.log(request.messages)
+                console.log("Testing", request.messages);
                 request.messages.forEach(msg => {
                     addMessage(msg);
                 });
+                break;
         }
     }
 );

@@ -311,7 +311,6 @@ class MessageBox {
             }, (resp) => console.log(resp));
         }*/
 
-    }*/
 
 }
 

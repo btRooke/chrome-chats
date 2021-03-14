@@ -94,20 +94,18 @@ function joinRoom(io, socket) {
 function getMessages(io, socket) {
     socket.on('get-messages', (data) => {
         let room = ROOMS[data.url];
-        if (!room) {
-            return null;
-        }
 
-        if (!room.messages) {
-            query.getMessages(data.url, data.totalMessages, (messages) => {
-                if (messages) {
-                    room.messages = messages;
-                    socket.emit("messages", messages);
-                }
-            });
-        } else {
-            return room.messages;
-        }
+        console.log(JSON.stringify(data));
+
+        query.getMessages(data.url, data.totalMessages, (messages) => {
+            if (messages) {
+                room.messages = messages;
+
+                console.log(JSON.stringify(messages));
+                socket.emit("messages", messages);
+            }
+        });
+
     });
 }
 

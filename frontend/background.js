@@ -34,8 +34,10 @@ socket.on("users-changed", numUsers => {
 
 socket.on("messages", messages => {
     console.log(JSON.stringify(messages));
-    user.messages.push(messages);
-    chrome.runtime.sendMessage({request: "add-messages", messages});
+    user.messages = messages;
+    messages.forEach(msg => {
+        chrome.runtime.sendMessage({request: "message", msg});
+    });
 });
 
 // request is in the form: { request, payload }
