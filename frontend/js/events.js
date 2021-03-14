@@ -12,7 +12,7 @@ chrome.runtime.onMessage.addListener(
                 box.updateNumberOfUsers(request.numUsers);
                 break;
             case "add-messages":
-                console.log(request.messages);
+                console.log(request.messages)
                 request.messages.forEach(msg => {
                     addMessage(msg);
                 });
@@ -37,8 +37,13 @@ function addMessage(messageObj) {
 }
 
 
+function sortByTimeStamp(o1, o2) {
+    return -o1.timestamp.localeCompare(o2.timestamp);
+}
+
 chrome.runtime.sendMessage({request: 'request-data'}, function (resp) {
     box.updateNumberOfUsers(resp.numUsers);
+    resp.messages = resp.messages.sort(sortByTimeStamp);
     resp.messages.forEach(messageObj => {
         addMessage(messageObj);
     });

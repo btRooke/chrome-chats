@@ -31,7 +31,7 @@ socket.on("users-changed", numUsers => {
     chrome.runtime.sendMessage({request: 'update-users', numUsers});
 });
 
-socket.on("history", messages => {
+socket.on("messages", messages => {
     console.log(JSON.stringify(messages));
     user.messages = messages;
     chrome.runtime.sendMessage({request: "add-messages", messages});

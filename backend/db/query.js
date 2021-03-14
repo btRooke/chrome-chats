@@ -31,6 +31,7 @@ module.exports.getMessages = function(url, has, wants, cb) {
             cb(null);
         })
         .then(res => {
+            res.forEach(doc => console.log(doc.timestamp));
             cb(res);
         });
 }
