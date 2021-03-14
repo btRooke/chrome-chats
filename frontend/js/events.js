@@ -1,7 +1,6 @@
 chrome.runtime.onMessage.addListener(
     (request, sender, sendResponse) => {
         console.log(`request: ${JSON.stringify(request)}`)
-        debugger;
 
         switch (request.request) {
             case "message":
@@ -10,10 +9,13 @@ chrome.runtime.onMessage.addListener(
                 const time = new Date(messageObj.timestamp);
                 const timeString = `${time.getHours()}:${time.getMinutes()} ${time.getDate()}/${time.getMonth()}/${time.getFullYear()}`;
 
-                if (!messageObj.image) {
+                if (!messageObj.isImage) {
                     box.addMessage(messageObj.username, timeString, messageObj.message);
                 } else {
-                    // Cpmvert the image from base 65
+                    // Convert the image to base 64.
+                    let blob = blobFromBase64(messageObj.message);
+                    box.addImageMessage(messageObj.username, timeString, blob);
+
                 }
 
                 break;

@@ -31,6 +31,14 @@ socket.on("users-changed", numUsers => {
     chrome.runtime.sendMessage({request: 'update-users', numUsers});
 });
 
+socket.on("get-history", messages => {
+    messages.forEach(msg => {
+        console.log(msg);
+        user.messages.push(msg);
+        chrome.runtime.sendMessage({request: "message", message: msg});
+    });
+});
+
 // request is in the form: { request, payload }
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
@@ -99,6 +107,3 @@ chrome.tabs.onUpdated.addListener(function(tabId){
         }
     })
 });
-
-
-

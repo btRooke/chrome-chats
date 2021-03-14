@@ -43,7 +43,8 @@ function roomManagement(io) {
         joinRoom(io, socket);
         sendMessage(io, socket);
         sendImage(io, socket);
-        leaveRoom(io, socket)
+        leaveRoom(io, socket);
+        // getHistory(io, socket);
     });
 }
 
@@ -87,17 +88,26 @@ function joinRoom(io, socket) {
         console.log(`Joined Room`)
 
         emitUserUpdate(io, room, false);
-
         socket.emit("joined-room", room.url);
     });
 }
+
+function getHistory(url, socket) {
+    query.getMessages(url, (messages) => {
+        console.log(`History: ${messages}`);
+
+        if (messages)
+            socket.emit("messages", messages);
+    });
+}
+
 
 function sendMessage(io, socket) {
     socket.on('send-message', (data) => {
         let room = ROOMS[data.url];
         if (room) {
             room.addMessage(data.username, data.message);
-            io.in(data.url).emit("message", {username: data.username, message: data.message, timestamp: new Date(), image: false});
+            io.in(data.url).emit("message", {username: data.username, message: data.message, timestamp: new Date()});
         }
     });
 }
@@ -108,7 +118,7 @@ function sendImage(io, socket) {
         let room = ROOMS[data.url];
         if (room) {
             room.addImage(data.username, data.message);
-            io.in(data.url).emit("message", {username: data.username, message: data.message, image: true, timestamp: new Date()});
+            io.in(data.url).emit("message", {username: data.username, message: data.message, isImage: true, timestamp: new Date()});
         }
     });
 }
