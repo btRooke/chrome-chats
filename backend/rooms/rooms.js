@@ -11,7 +11,6 @@ class Room {
         this.messages = [];
         this.numUsers = 0;
         this.io = io;
-        db.getMessages(this, io);
     }
 
     addUser() {
@@ -26,7 +25,7 @@ class Room {
         console.log(`Message sent: ${JSON.stringify(payload)}`);
         query.addMessage(this.hash, username, payload, false, (added) => {
             if (added) {
-                this.io.of(this.hash).emit("message", "this worked");
+                this.io.of(this.hash).emit("message", {username: "tim", message: "this worked bruh"});
             }
         });
         // db.addMessage(this.hash, {'username': username, 'message': payload});

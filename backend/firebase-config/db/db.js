@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const schema = require('./schema')
 
 // Define mongodb connection
-let url = 'mongodb://127.0.0.1:27017/ChromeChats';
+let url = 'mongodb://127.0.0.1:27017/chromeChats';
 let options = {
     "useNewUrlParser": true,
     "useUnifiedTopology": true,

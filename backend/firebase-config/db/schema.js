@@ -4,8 +4,7 @@ module.exports.messageSchema = new Schema(
     {
         url: {
             type: String,
-            required: true,
-            unique: true
+            required: true
         },
 
         username: {
