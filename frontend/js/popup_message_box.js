@@ -6,14 +6,38 @@ function processText(text) {
 
 }
 
-function toBase64(blob, callback) {
-    var reader = new FileReader();
-    reader.onload = function() {
-        var dataUrl = reader.result;
-        var base64 = dataUrl.split(',')[1];
-        callback(base64);
-    };
-    reader.readAsDataURL(blob);
+function blobToBase64(fileBlob) {
+
+    return new Promise((resolve, reject) => {
+
+        let reader = new FileReader();
+        reader.readAsDataURL(fileBlob);
+
+        reader.onloadend = function() {
+            resolve(reader.result)
+        }
+
+    })
+
+}
+
+function blobFromBase64(dataurl) {
+
+    return new Promise((resolve, reject) => {
+
+        let arr = dataurl.split(','),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+
+        resolve(new File([u8arr], "file", {type:mime}));
+
+    })
 
 }
 
