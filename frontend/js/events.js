@@ -8,7 +8,7 @@ chrome.runtime.onMessage.addListener(
                 let messageObj = request.message;
                 console.log(`Message: ${JSON.stringify(messageObj)}`)
                 const time = new Date(messageObj.timestamp);
-                const timeString = `${time.getHours()}:${time.getMinutes()} ${time.getDate()}`;
+                const timeString = `${time.getHours()}:${time.getMinutes()} ${time.getDate()}/${time.getMonth()}/${time.getFullYear()}`;
                 box.addMessage(messageObj.username, timeString, messageObj.message);
                 break;
             case "update-users":
@@ -24,7 +24,7 @@ chrome.runtime.sendMessage({request: 'request-data'}, function (resp) {
     box.updateNumberOfUsers(resp.numUsers);
     resp.messages.forEach(messageObj => {
         const time = new Date(messageObj.timestamp);
-        const timeString = `${time.getHours()}:${time.getMinutes()} ${time.getDate()}`;
+        const timeString = `${time.getHours()}:${time.getMinutes()} ${time.getDate()}/${time.getMonth()}/${time.getFullYear()}`;
         box.addMessage(messageObj.username, timeString, messageObj.message);
     });
 });

@@ -83,6 +83,7 @@ class MessageBox {
                 this.messageBarElement.value = "";
 
             }
+
         }
 
     }
